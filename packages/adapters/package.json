@@ -1,0 +1,15 @@
+{
+  "name": "@e-chan1007/regisaku-adapters",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "lint": "biome check --write"
+  },
+  "sideEffects": false,
+  "exports": {},
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}

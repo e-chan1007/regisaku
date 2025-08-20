@@ -1,0 +1,16 @@
+{
+  "name": "@e-chan1007/regisaku-adapter-sdk",
+  "type": "module",
+  "scripts": {
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "build": "tsup src/index.ts --format esm --dts",
+    "lint": "biome check --write"
+  },
+  "sideEffects": false,
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
+  }
+}

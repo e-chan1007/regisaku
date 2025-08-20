@@ -1,0 +1,10 @@
+packages:
+  - app
+  - packages/*
+
+onlyBuiltDependencies:
+  - "@tailwindcss/oxide"
+  - better-sqlite3
+  - lefthook
+  - sharp
+  - vue-demi

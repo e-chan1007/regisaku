@@ -1,0 +1,21 @@
+{
+  "name": "@e-chan1007/regisaku-app",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "biome check --write"
+  },
+  "dependencies": {
+    "@e-chan1007/regisaku-base": "workspace:*",
+    "@e-chan1007/regisaku-adapters": "workspace:*",
+    "nuxt": "^4.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}

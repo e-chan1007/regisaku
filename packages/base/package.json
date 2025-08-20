@@ -1,0 +1,22 @@
+{
+  "name": "@e-chan1007/regisaku-base",
+  "type": "module",
+  "private": true,
+  "main": "./nuxt.config.ts",
+  "scripts": {
+    "postinstall": "nuxt prepare",
+    "lint": "biome check --write"
+  },
+  "dependencies": {
+    "@e-chan1007/regisaku-adapter-sdk": "workspace:*",
+    "@nuxt/fonts": "^0.11.4",
+    "@nuxt/icon": "^2.0.0",
+    "@nuxt/scripts": "^0.11.10",
+    "@unhead/vue": "^2.0.14"
+  },
+  "devDependencies": {
+    "nuxt": "^4.0.3",
+    "sass-embedded": "^1.90.0",
+    "typescript": "^5.9.2"
+  }
+}

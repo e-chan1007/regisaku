@@ -1,0 +1,10 @@
+pre-commit:
+  commands:
+    lint:
+      run: pnpm biome lint --write {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm commitlint --edit {1}
