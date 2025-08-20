@@ -12,9 +12,11 @@
     "@nuxt/fonts": "^0.11.4",
     "@nuxt/icon": "^2.0.0",
     "@nuxt/scripts": "^0.11.10",
-    "@unhead/vue": "^2.0.14"
+    "@unhead/vue": "^2.0.14",
+    "chroma-js": "^3.1.2"
   },
   "devDependencies": {
+    "@types/chroma-js": "^3.1.1",
     "nuxt": "^4.0.3",
     "sass-embedded": "^1.90.0",
     "typescript": "^5.9.2"
