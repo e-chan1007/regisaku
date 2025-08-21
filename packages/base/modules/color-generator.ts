@@ -26,7 +26,7 @@ export default defineNuxtModule({
 
     nuxt.hook("nitro:build:before", async () => {
       const colors: Record<string, string> =
-        nuxt.options.runtimeConfig.theme?.colors ?? {};
+        nuxt.options.runtimeConfig.public.theme?.colors ?? {};
 
       const css = [
         ":root {",

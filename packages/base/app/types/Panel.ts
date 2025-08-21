@@ -1,20 +1,13 @@
-export interface PanelConfig {
+export type PanelView = {
   id: string;
-  component: Component<PanelChildProps>;
-}
-
-export type ViewConfig = {
-  panels: {
-    id: string;
-    width: string;
-  }[];
-};
+  width: string;
+}[];
 
 export interface PanelChildProps {
   setViewIndex: (index: number) => void;
   next: () => void;
   prev: () => void;
-  currentViewIndex: number;
-  active: boolean;
-  isTransitioning: boolean;
+  currentViewIndex: MaybeRef<number>;
+  active: MaybeRef<boolean>;
+  isTransitioning: MaybeRef<boolean>;
 }

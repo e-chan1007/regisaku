@@ -1,7 +1,7 @@
 export interface TabConfig {
-  order: number;
   label: string;
   icon: string;
+  disabled?: boolean;
 }
 
 declare module "#app" {

@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from "vue";
 import type { PanelChildProps } from "~/types/Panel";
 
 defineProps<PanelChildProps>();
 </script>
+

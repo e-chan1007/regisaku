@@ -4,6 +4,7 @@
   "private": true,
   "main": "./nuxt.config.ts",
   "scripts": {
+    "dev": "nuxt dev -p 0",
     "postinstall": "nuxt prepare",
     "lint": "biome check --write"
   },
@@ -19,6 +20,7 @@
     "@types/chroma-js": "^3.1.1",
     "nuxt": "^4.0.3",
     "sass-embedded": "^1.90.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vue": "^3.5.18"
   }
 }

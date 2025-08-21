@@ -5,7 +5,9 @@ import ColorGenerator from "./modules/color-generator";
 const currentDir = dirname(fileURLToPath(import.meta.url));
 
 declare module "nuxt/schema" {
-  interface RuntimeConfig {
+  interface PublicRuntimeConfig {
+    appName?: string;
+    tabs?: string[];
     theme?: {
       colors?: {
         primary?: string;
@@ -24,14 +26,18 @@ export default defineNuxtConfig({
   modules: ["@nuxt/fonts", "@nuxt/icon", "@nuxt/scripts", ColorGenerator],
   css: [join(currentDir, "./app/assets/styles/global.scss")],
   runtimeConfig: {
-    theme: {
-      colors: {
-        primary: "#0063b2",
-        gray: "#374151",
-        info: "#3b92f6",
-        success: "#22a06b",
-        error: "#b91c3a",
-        warning: "#c58a1c",
+    public: {
+      appName: "regisaku",
+      tabs: ["index", "tab2", "tab3"],
+      theme: {
+        colors: {
+          primary: "#0063b2",
+          gray: "#374151",
+          info: "#3b92f6",
+          success: "#22a06b",
+          error: "#b91c3a",
+          warning: "#c58a1c",
+        },
       },
     },
   },

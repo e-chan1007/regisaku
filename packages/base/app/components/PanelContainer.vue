@@ -1,18 +1,43 @@
-<script setup lang="ts">
-import type { PanelConfig, ViewConfig } from "~/types/Panel";
+<template>
+  <div class="panel-container">
+    <div
+      v-for="panelId in allPanelIds"
+      :key="panelId"
+      class="panel"
+      :style="getPanelStyle(panelId)"
+    >
+      <slot
+        :name="panelId"
+        v-bind="{
+          ...exposed,
+          active: !!(currentView && currentView.some(p => p.id === panelId))
+        }"
+      />
+    </div>
+  </div>
+</template>
 
-const props = defineProps<{
-  panels: PanelConfig[];
-  viewConfigs: ViewConfig[];
+<script setup lang="ts">
+import type { PanelChildProps, PanelView } from "~/types/Panel";
+
+const slots = defineSlots<{
+  [key: string]: (props: PanelChildProps) => unknown;
 }>();
 
-const currentViewIndex = ref(0);
-const previousView = ref(0);
+const props = defineProps<{ viewConfigs: PanelView[] }>();
+
+const $slots = useSlots();
+const allPanelIds = Object.keys($slots);
+
+import { computed, ref, watch } from "vue";
+
+const currentViewIndex = ref<number>(0);
+const previousView = ref<number>(0);
 watch(currentViewIndex, (_newValue, oldValue) => {
   previousView.value = oldValue;
 });
 
-const isTransitioning = ref(false);
+const isTransitioning = ref<boolean>(false);
 const transitionDuration = 500;
 const cssTransitionDuration = `${transitionDuration}ms`;
 
@@ -41,16 +66,14 @@ defineExpose(exposed);
 
 const currentView = computed(() => props.viewConfigs[currentViewIndex.value]);
 
-const getPanelStyle = (panelIndex: number) => {
-  const panelId = props.panels[panelIndex]?.id;
+const getPanelStyle = (panelId: string) => {
   if (!currentView.value || !panelId) return { left: "100%", width: "0%" };
 
-  const viewPanels = currentView.value.panels;
-  const panelIndexInView = viewPanels.findIndex((p) => p.id === panelId);
+  const panelIndexInView = currentView.value.findIndex((p) => p.id === panelId);
 
   if (panelIndexInView !== -1) {
-    const width = viewPanels[panelIndexInView]?.width;
-    const precedingPanelWidths = viewPanels
+    const width = currentView.value[panelIndexInView]?.width;
+    const precedingPanelWidths = currentView.value
       .slice(0, panelIndexInView)
       .map((p) => p.width);
 
@@ -62,38 +85,18 @@ const getPanelStyle = (panelIndex: number) => {
     return { left, width };
   } else {
     const prevViewConfig = props.viewConfigs[previousView.value];
-    const panelInPrevView = prevViewConfig?.panels.find(
-      (p) => p.id === panelId,
-    );
-    const width = panelInPrevView?.width || "50%";
+    const panelInPrevView = prevViewConfig?.find((p) => p.id === panelId);
+    const width = panelInPrevView?.width ?? "50%";
 
-    const firstVisiblePanelId = viewPanels[0]?.id;
-    const firstVisiblePanelIndex = props.panels.findIndex(
-      (p) => p.id === firstVisiblePanelId,
-    );
+    const firstVisiblePanelId = currentView.value[0]?.id ?? "";
+    const firstVisiblePanelIndex = allPanelIds.indexOf(firstVisiblePanelId);
+    const panelIndex = allPanelIds.indexOf(panelId);
     const left = panelIndex < firstVisiblePanelIndex ? `-${width}` : "100%";
 
     return { left, width };
   }
 };
 </script>
-
-<template>
-  <div class="panel-container">
-    <div
-      v-for="(panel, index) in props.panels"
-      :key="panel.id"
-      class="panel"
-      :style="getPanelStyle(index)"
-    >
-      <component
-        :is="panel.component"
-        v-bind="exposed"
-        :active="currentView?.panels.some(p => p.id === panel.id)"
-      />
-    </div>
-  </div>
-</template>
 
 <style lang="scss" scoped>
 .panel-container {

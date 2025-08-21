@@ -13,7 +13,8 @@
   "dependencies": {
     "@e-chan1007/regisaku-base": "workspace:*",
     "@e-chan1007/regisaku-adapters": "workspace:*",
-    "nuxt": "^4.0.3"
+    "nuxt": "^4.0.3",
+    "vue": "^3.5.19"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

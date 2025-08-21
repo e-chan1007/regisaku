@@ -7,6 +7,14 @@
   </div>
 </template>
 
+<script lang="ts" setup>
+const { appName } = useRuntimeConfig().public;
+useHead({
+  title: appName,
+  titleTemplate: (pageTitle) => `${pageTitle} - ${appName}`,
+});
+</script>
+
 <style lang="scss" scoped>
 .layout {
   height: 100%;

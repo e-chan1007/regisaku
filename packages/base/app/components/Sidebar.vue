@@ -1,7 +1,7 @@
 <template>
   <nav :class="['sidebar', { collapsed }]">
     <div class="sidebar-header">
-      <span class="sidebar-title">regisaku</span>
+      <span class="sidebar-title">{{ appName }}</span>
       <div class="sidebar-toggle" @click="toggleSidebar">
         <Icon name="material-symbols:chevron-left" filled />
       </div>
@@ -9,7 +9,7 @@
 
     <ul class="sidebar-menu">
       <li v-for="item in menuItems" :key="item.path" class="sidebar-menu-item">
-        <NuxtLink :to="item.path" :class="['sidebar-link', { active: $route.path === item.path }]">
+        <NuxtLink :to="item.path" :class="['sidebar-link', { active: currentRoute.path === item.path }]">
           <Icon :name="item.icon!" filled class="sidebar-icon" />
           <span class="sidebar-link-text">{{ item.label }}</span>
         </NuxtLink>
@@ -25,18 +25,26 @@
 <script setup lang="ts">
 import type { TabConfig } from "~/types/Tab";
 
-const router = useRouter();
+const { getRoutes, currentRoute } = useRouter();
+const { appName, tabs } = useRuntimeConfig().public;
 const collapsed = ref(false);
 
 const toggleSidebar = () => {
   collapsed.value = !collapsed.value;
 };
 
-const menuItems = router
-  .getRoutes()
-  .filter((route) => !!route.meta.tab)
-  .map((route) => ({ ...(route.meta.tab as TabConfig), path: route.path }))
-  .sort((a, b) => a.order - b.order);
+useHead({
+  title: () => currentRoute.value.meta.tab?.label,
+});
+
+const menuItems = computed(() =>
+  getRoutes()
+    .filter((route) => route.meta?.tab && !route.meta.tab.disabled)
+    .map((route) => ({ ...(route.meta.tab as TabConfig), path: route.path }))
+    .sort(
+      (a, b) => tabs.indexOf(a.path.slice(1)) - tabs.indexOf(b.path.slice(1)),
+    ),
+);
 </script>
 
 <style lang="scss">
