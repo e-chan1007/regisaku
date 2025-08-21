@@ -38,7 +38,7 @@ watch(currentViewIndex, (_newValue, oldValue) => {
 });
 
 const isTransitioning = ref<boolean>(false);
-const transitionDuration = 500;
+const transitionDuration = 350;
 const cssTransitionDuration = `${transitionDuration}ms`;
 
 const setViewIndex = (index: number) => {
@@ -55,14 +55,14 @@ const setViewIndex = (index: number) => {
 const next = () => setViewIndex(currentViewIndex.value + 1);
 const prev = () => setViewIndex(currentViewIndex.value - 1);
 
-const exposed = {
+const exposed = computed(() => ({
   setViewIndex,
   next,
   prev,
-  currentViewIndex,
-  isTransitioning,
-};
-defineExpose(exposed);
+  currentViewIndex: currentViewIndex.value,
+  isTransitioning: isTransitioning.value,
+}));
+defineExpose(exposed.value);
 
 const currentView = computed(() => props.viewConfigs[currentViewIndex.value]);
 

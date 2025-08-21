@@ -6,9 +6,9 @@ import { resolve } from "path";
 const createCSSVariables = (key: string, color: string): string => {
   const colorPalette = chroma
     .scale([
-      chroma(color).set("lch.l", 95),
-      chroma(color).set("lch.l", 50),
-      chroma(color).set("lch.l", 10),
+      chroma(color).set("lch.l", 95).set("lch.c", 10).mix("white"),
+      chroma(color).set("lch.l", 60),
+      chroma(color).set("lch.l", 20),
     ])
     .mode("lch")
     .colors(10);

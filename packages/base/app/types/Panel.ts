@@ -7,7 +7,7 @@ export interface PanelChildProps {
   setViewIndex: (index: number) => void;
   next: () => void;
   prev: () => void;
-  currentViewIndex: MaybeRef<number>;
-  active: MaybeRef<boolean>;
-  isTransitioning: MaybeRef<boolean>;
+  currentViewIndex: number;
+  active: boolean;
+  isTransitioning: boolean;
 }

@@ -23,8 +23,26 @@ declare module "nuxt/schema" {
 
 export default defineNuxtConfig({
   compatibilityDate: "2025-08-20",
-  modules: ["@nuxt/fonts", "@nuxt/icon", "@nuxt/scripts", ColorGenerator],
+  modules: [
+    "@nuxt/fonts",
+    "@nuxt/icon",
+    "@nuxt/scripts",
+    "@vueuse/nuxt",
+    ColorGenerator,
+  ],
   css: [join(currentDir, "./app/assets/styles/global.scss")],
+  components: [
+    {
+      path: join(currentDir, "./app/components"),
+      prefix: "RS",
+    },
+    "~/components",
+  ],
+  fonts: {
+    defaults: {
+      weights: ["100 900"],
+    },
+  },
   runtimeConfig: {
     public: {
       appName: "regisaku",
@@ -32,8 +50,8 @@ export default defineNuxtConfig({
       theme: {
         colors: {
           primary: "#0063b2",
-          gray: "#374151",
-          info: "#3b92f6",
+          gray: "#28292c",
+          info: "#3babf6",
           success: "#22a06b",
           error: "#b91c3a",
           warning: "#c58a1c",
@@ -47,6 +65,7 @@ export default defineNuxtConfig({
         scss: {
           additionalData: `
             @use "sass:math";
+            @use "sass:list";
             @use "${join(currentDir, "./app/assets/styles/variables")}" as *;
           `,
         },

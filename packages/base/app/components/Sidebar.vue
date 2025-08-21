@@ -27,7 +27,7 @@ import type { TabConfig } from "~/types/Tab";
 
 const { getRoutes, currentRoute } = useRouter();
 const { appName, tabs } = useRuntimeConfig().public;
-const collapsed = ref(false);
+const collapsed = ref(true);
 
 const toggleSidebar = () => {
   collapsed.value = !collapsed.value;
@@ -53,7 +53,7 @@ const menuItems = computed(() =>
   flex-direction: column;
   width: 15rem;
   height: 100vh;
-  background-color: $color-primary-8;
+  background: linear-gradient($color-primary-8, $color-primary-9);
   color: $color-text-inverse;
   padding: $spacing-md;
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
@@ -68,7 +68,7 @@ const menuItems = computed(() =>
 
   .sidebar-title {
     font-size: $text-lg;
-    font-weight: bold;
+    font-weight: $font-bold;
     white-space: nowrap;
     overflow: hidden;
     transition: opacity 0.3s ease, width 0.3s ease;
@@ -111,11 +111,11 @@ const menuItems = computed(() =>
 
   &.active {
     background-color: $color-primary-4;
-    font-weight: bold;
+    font-weight: $font-bold;
   }
 
   .sidebar-icon {
-    font-size: $text-lg;
+    font-size: $text-xl;
     flex-shrink: 0;
   }
 
@@ -127,7 +127,7 @@ const menuItems = computed(() =>
 }
 
 .collapsed {
-  width: 5rem;
+  width: 4.5rem;
   padding-inline: $spacing-sm;
 
   .sidebar-header {

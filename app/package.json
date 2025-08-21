@@ -17,6 +17,7 @@
     "vue": "^3.5.19"
   },
   "devDependencies": {
+    "@iconify-json/material-symbols": "^1.2.32",
     "typescript": "^5.9.2"
   }
 }

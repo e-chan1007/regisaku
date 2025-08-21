@@ -1,59 +1,62 @@
 <template>
-  <PanelContainer :viewConfigs="viewConfigs">
-    <template #panel-1="slotProps">
-      <Panel1 v-bind="slotProps" />
+  <RSPanelContainer :viewConfigs="viewConfigs">
+    <template #item-grid="slotProps">
+      <CashierItemGridPanel v-bind="slotProps" />
     </template>
-    <template #panel-2="slotProps">
-      <Panel2 v-bind="slotProps" />
+    <template #cart="slotProps">
+      <CashierCartPanel v-bind="slotProps" />
     </template>
-    <template #panel-3="slotProps">
-      <Panel3 v-bind="slotProps" />
+    <template #calc="slotProps">
+      <CashierCalcPanel v-bind="slotProps" />
     </template>
     <template #panel-4="slotProps">
-      <Panel4 v-bind="slotProps" />
+      <RSPanel4 v-bind="slotProps" />
     </template>
-  </PanelContainer>
+  </RSPanelContainer>
 </template>
 
 <script lang="ts" setup>
+import CashierCalcPanel from "~/features/cashier/panels/CashierCalcPanel.vue";
+import CashierCartPanel from "~/features/cashier/panels/CashierCartPanel.vue";
+import CashierItemGridPanel from "~/features/cashier/panels/CashierItemGridPanel.vue";
 import type { PanelView } from "~/types/Panel";
 
 definePageMeta({
   tab: {
-    label: "Home",
-    icon: "material-symbols:home",
+    label: "会計",
+    icon: "material-symbols:contextual-token-add",
   },
 });
 
 const viewConfigs: PanelView[] = [
   [
     {
-      id: "panel-1",
+      id: "item-grid",
       width: "70%",
     },
     {
-      id: "panel-2",
+      id: "cart",
       width: "30%",
     },
   ],
   [
     {
-      id: "panel-2",
+      id: "cart",
       width: "30%",
     },
     {
-      id: "panel-3",
+      id: "calc",
       width: "70%",
     },
   ],
   [
     {
-      id: "panel-3",
-      width: "50%",
+      id: "calc",
+      width: "70%",
     },
     {
       id: "panel-4",
-      width: "50%",
+      width: "30%",
     },
   ],
 ];

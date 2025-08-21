@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <Sidebar class="layout-sidebar" />
+    <RSSidebar class="layout-sidebar" />
     <div class="layout-content">
       <slot />
     </div>
