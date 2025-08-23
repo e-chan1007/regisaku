@@ -25,7 +25,7 @@ h2 {
 }
 
 h3 {
-  color: $color-primary-8;
+  color: $color-primary-7;
   font-weight: $font-bold;
 }
 </style>

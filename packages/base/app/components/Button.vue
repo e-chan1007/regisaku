@@ -80,7 +80,6 @@ defineSlots<{
 }
 
 .btn-sm {
-  font-size: $text-sm;
   gap: $spacing-md;
   height: calc(2 * $spacing-sm + 1em);
 
@@ -90,10 +89,12 @@ defineSlots<{
 
   &.btn-normal, &.btn-rounded {
     padding: $spacing-sm $spacing-lg;
+    font-size: $text-sm;
   }
 
   &.btn-square, &.btn-circle {
     padding: $spacing-sm;
+    font-size: $text-md;
   }
 }
 
@@ -170,7 +171,7 @@ defineSlots<{
     }
 
     &.btn-outlined {
-      border: 2px solid list.nth($palette, 6);
+      border: 2px solid list.nth($palette, 4);
       background-color: transparent;
       color: list.nth($palette, 8);
 

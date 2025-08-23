@@ -1,6 +1,5 @@
 <template>
-  <div class="panel-body">
-    <RSHeading level="1" v-if="title">{{ title }}</RSHeading>
+  <div class="panel-body" :class="{ 'no-padding': noPadding }">
     <slot v-bind="props" />
   </div>
 </template>
@@ -9,7 +8,7 @@
 import type { PanelChildProps } from "~/types/Panel";
 
 interface Props extends Partial<PanelChildProps> {
-  title?: string;
+  noPadding?: boolean;
 }
 
 const props = defineProps<Props>() as Required<Props>;
@@ -22,5 +21,9 @@ defineSlots<{ default: (props: PanelChildProps) => unknown }>();
   padding: $spacing-lg;
   background-color: $color-white;
   border-radius: $radius-md;
+
+  &.no-padding {
+    padding: 0;
+  }
 }
 </style>

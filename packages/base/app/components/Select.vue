@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <Listbox v-model="modelValue">
-      <ListboxButton class="select">
+    <Listbox v-model="modelValue" v-slot="{ open }">
+      <ListboxButton class="select" :class="[`select-${props.size}`, { open }]">
         {{ modelValue?.label }}
         <Icon name="material-symbols:expand-more" />
       </ListboxButton>
@@ -33,9 +33,10 @@ type Option = InstanceType<typeof ListboxOption>["$props"] & {
 
 interface Props<T extends Option = Option> {
   options: T[];
+  size?: "sm" | "md" | "lg";
 }
 
-defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), { size: "md" });
 const modelValue = defineModel<Props["options"][number]>();
 </script>
 
@@ -46,6 +47,7 @@ const modelValue = defineModel<Props["options"][number]>();
   width: max-content;
 }
 
+
 .select {
   display: flex;
   flex-direction: row;
@@ -54,9 +56,29 @@ const modelValue = defineModel<Props["options"][number]>();
   gap: $spacing-md;
   width: 100%;
   min-width: 10rem;
-  padding: $spacing-md $spacing-lg;
   border: 2px solid $color-border;
   border-radius: $radius-md;
+  transition: border-color 0.2s ease;
+
+  &.open {
+    border-color: $color-primary-5;
+  }
+}
+
+.select-sm {
+  font-size: $text-sm;
+  padding: $spacing-sm $spacing-md;
+  height: calc(2 * $spacing-sm + 1em);
+}
+.select-md {
+  font-size: $text-md;
+  padding: $spacing-md $spacing-lg;
+  height: calc(2 * $spacing-md + 1em);
+}
+.select-lg {
+  font-size: $text-xl;
+  padding: $spacing-xl $spacing-xl;
+  height: calc(2 * $spacing-xl + 1em);
 }
 
 .dropdown {
@@ -81,12 +103,13 @@ const modelValue = defineModel<Props["options"][number]>();
   width: 100%;
   padding: $spacing-md $spacing-lg;
   transition: background-color 0.1s ease;
+  cursor: pointer;
 
-  &:hover, &:focus {
+  &[aria-selected=true] {
     background-color: $color-primary-1;
   }
 
-  &[aria-selected=true] {
+  &:hover, &:focus {
     background-color: $color-primary-0;
   }
 
