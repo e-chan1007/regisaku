@@ -11,6 +11,7 @@
 </template>
 
 <script lang="ts" setup>
+import { clamp } from "remeda";
 import type { InputHTMLAttributes } from "vue";
 
 interface Props extends /* @vue-ignore */ InputHTMLAttributes {
@@ -20,18 +21,14 @@ interface Props extends /* @vue-ignore */ InputHTMLAttributes {
   full?: boolean;
   size?: "sm" | "md" | "lg";
 }
-const props = withDefaults(defineProps<Props>(), { full: false, size: "md" });
+const { min, max } = withDefaults(defineProps<Props>(), {
+  full: false,
+  size: "md",
+});
 const modelValue = defineModel<Props["modelValue"]>({ default: 0 });
 
 const add = (amount: number) => {
-  let value = (modelValue.value ?? 0) + amount;
-  if (typeof props.min !== "undefined") {
-    value = Math.max(value, props.min);
-  }
-  if (typeof props.max !== "undefined") {
-    value = Math.min(value, props.max);
-  }
-  modelValue.value = value;
+  modelValue.value = clamp((modelValue.value ?? 0) + amount, { min, max });
 };
 </script>
 
@@ -90,41 +87,28 @@ const add = (amount: number) => {
   }
 }
 
-.input-sm {
-  font-size: $text-sm;
-  height: calc(2 * $spacing-sm + 1em);
-  border-radius: $radius-sm;
-  input {
-    font-size: $text-sm;
-    padding: $spacing-sm;
+
+@mixin countinput-size($name, $font, $height, $radius, $pad) {
+  .input-#{$name} {
+    font-size: $font;
+    height: $height;
+    border-radius: $radius;
+    input {
+      font-size: $font;
+      padding: $pad;
+    }
+  }
+  .btn-decrement {
+    border-top-left-radius: $radius;
+    border-bottom-left-radius: $radius;
+  }
+  .btn-increment {
+    border-top-right-radius: $radius;
+    border-bottom-right-radius: $radius;
   }
 }
 
-.btn-decrement {
-  border-top-left-radius: $radius-sm;
-  border-bottom-left-radius: $radius-sm;
-}
-
-.btn-increment {
-  border-top-right-radius: $radius-sm;
-  border-bottom-right-radius: $radius-sm;
-}
-
-.input-md {
-  font-size: $text-md;
-  height: calc(2 * $spacing-md + 1em);
-  input {
-    font-size: $text-md;
-    padding: $spacing-md;
-  }
-}
-
-.input-lg {
-  font-size: $text-xl;
-  height: calc(2 * $spacing-xl + 1em);
-  input {
-    font-size: $text-xl;
-    padding: $spacing-xl;
-  }
-}
+@include countinput-size(sm, $text-sm, calc(2 * $spacing-sm + 1em), $radius-sm, $spacing-sm);
+@include countinput-size(md, $text-md, calc(2 * $spacing-md + 1em), $radius-md, $spacing-md);
+@include countinput-size(lg, $text-xl, calc(2 * $spacing-xl + 1em), $radius-md, $spacing-xl);
 </style>

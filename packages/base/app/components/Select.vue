@@ -65,21 +65,18 @@ const modelValue = defineModel<Props["options"][number]>();
   }
 }
 
-.select-sm {
-  font-size: $text-sm;
-  padding: $spacing-sm $spacing-md;
-  height: calc(2 * $spacing-sm + 1em);
+
+@mixin select-size($name, $font, $pad-y, $pad-x, $height) {
+  .select-#{$name} {
+    font-size: $font;
+    padding: $pad-y $pad-x;
+    height: $height;
+  }
 }
-.select-md {
-  font-size: $text-md;
-  padding: $spacing-md $spacing-lg;
-  height: calc(2 * $spacing-md + 1em);
-}
-.select-lg {
-  font-size: $text-xl;
-  padding: $spacing-xl $spacing-xl;
-  height: calc(2 * $spacing-xl + 1em);
-}
+
+@include select-size(sm, $text-sm, $spacing-sm, $spacing-md, calc(2 * $spacing-sm + 1em));
+@include select-size(md, $text-md, $spacing-md, $spacing-lg, calc(2 * $spacing-md + 1em));
+@include select-size(lg, $text-xl, $spacing-xl, $spacing-xl, calc(2 * $spacing-xl + 1em));
 
 .dropdown {
   position: absolute;

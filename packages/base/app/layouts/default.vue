@@ -2,7 +2,7 @@
   <div class="layout">
     <RSSidebar class="layout-sidebar" />
     <div class="layout-content">
-      <slot />
+      <slot  />
     </div>
   </div>
 </template>
@@ -24,10 +24,12 @@ useHead({
 
 .layout-sidebar {
   flex-shrink: 0;
+  z-index: 1;
 }
 
 .layout-content {
   flex-grow: 1;
   min-height: 100%;
+  z-index: 0;
 }
 </style>

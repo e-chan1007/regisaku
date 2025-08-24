@@ -79,58 +79,30 @@ defineSlots<{
   width: 100%;
 }
 
+@mixin btn-size($name, $font, $gap, $height, $pad-y, $pad-x, $radius) {
+  .btn-#{$name} {
+    font-size: $font;
+    gap: $gap;
+    height: $height;
+    &.btn-normal, &.btn-square {
+      border-radius: $radius;
+    }
+    &.btn-normal, &.btn-rounded {
+      padding: $pad-y $pad-x;
+    }
+    &.btn-square, &.btn-circle {
+      padding: $pad-y;
+    }
+  }
+}
+
+@include btn-size(sm, $text-sm, $spacing-md, calc(2 * $spacing-sm + 1em), $spacing-sm, $spacing-lg, $radius-sm);
+@include btn-size(md, $text-md, $spacing-md, calc(2 * $spacing-md + 1em), $spacing-md, $spacing-lg, $radius-md);
+@include btn-size(lg, $text-xl, $spacing-xl, calc(2 * $spacing-xl + 1em), $spacing-xl, $spacing-xl, $radius-md);
+
 .btn-sm {
-  gap: $spacing-md;
-  height: calc(2 * $spacing-sm + 1em);
-
-  &.btn-normal, &.btn-square {
-    border-radius: $radius-sm;
-  }
-
-  &.btn-normal, &.btn-rounded {
-    padding: $spacing-sm $spacing-lg;
-    font-size: $text-sm;
-  }
-
   &.btn-square, &.btn-circle {
-    padding: $spacing-sm;
     font-size: $text-md;
-  }
-}
-
-.btn-md {
-  font-size: $text-md;
-  gap: $spacing-md;
-  height: calc(2 * $spacing-md + 1em);
-
-  &.btn-normal, &.btn-square {
-    border-radius: $radius-md;
-  }
-
-  &.btn-normal, &.btn-rounded {
-    padding: $spacing-md $spacing-lg;
-  }
-
-  &.btn-square, &.btn-circle {
-    padding: $spacing-md;
-  }
-}
-
-.btn-lg {
-  font-size: $text-xl;
-  gap: $spacing-xl;
-  height: calc(2 * $spacing-xl + 1em);
-
-  &.btn-normal, &.btn-square {
-    border-radius: $radius-md;
-  }
-
-  &.btn-normal, &.btn-rounded {
-   padding: $spacing-xl $spacing-xl;
-  }
-
-  &.btn-square, &.btn-circle {
-    padding: $spacing-xl;
   }
 }
 

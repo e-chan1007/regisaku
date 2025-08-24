@@ -1,18 +1,20 @@
 <template>
-  <RSPanelContainer :viewConfigs="viewConfigs">
-    <template #item-grid="slotProps">
-      <CashierItemGridPanel v-bind="slotProps" />
-    </template>
-    <template #cart="slotProps">
-      <CashierCartPanel v-bind="slotProps" />
-    </template>
-    <template #calc="slotProps">
-      <CashierCalcPanel v-bind="slotProps" />
-    </template>
-    <template #panel-4="slotProps">
-      <RSPanel4 v-bind="slotProps" />
-    </template>
-  </RSPanelContainer>
+  <div id="page-root" class="root">
+    <RSPanelContainer :viewConfigs="viewConfigs">
+      <template #item-grid="slotProps">
+        <CashierItemGridPanel v-bind="slotProps" />
+      </template>
+      <template #cart="slotProps">
+        <CashierCartPanel v-bind="slotProps" />
+      </template>
+      <template #calc="slotProps">
+        <CashierCalcPanel v-bind="slotProps" />
+      </template>
+      <template #panel-4="slotProps">
+        <RSPanel4 v-bind="slotProps" />
+      </template>
+    </RSPanelContainer>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -26,6 +28,7 @@ definePageMeta({
     label: "会計",
     icon: "material-symbols:contextual-token-add",
   },
+  keepalive: true,
 });
 
 const viewConfigs: PanelView[] = [
@@ -61,3 +64,10 @@ const viewConfigs: PanelView[] = [
   ],
 ];
 </script>
+
+<style lang="scss" scoped>
+.root {
+  position: relative;
+  height: 100%;
+}
+</style>

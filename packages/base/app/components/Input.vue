@@ -56,30 +56,19 @@ const props = withDefaults(defineProps<Props>(), { full: false, size: "md" });
   }
 }
 
-.input-sm {
-  font-size: $text-sm;
-  padding: $spacing-sm $spacing-md;
-  height: calc(2 * $spacing-sm + 1em);
-  input {
-    font-size: $text-sm;
+
+@mixin input-size($name, $font, $pad-y, $pad-x, $height) {
+  .input-#{$name} {
+    font-size: $font;
+    padding: $pad-y $pad-x;
+    height: $height;
+    input {
+      font-size: $font;
+    }
   }
 }
 
-.input-md {
-  font-size: $text-md;
-  padding: $spacing-md $spacing-lg;
-  height: calc(2 * $spacing-md + 1em);
-  input {
-    font-size: $text-md;
-  }
-}
-
-.input-lg {
-  font-size: $text-xl;
-  padding: $spacing-xl $spacing-xl;
-  height: calc(2 * $spacing-xl + 1em);
-  input {
-    font-size: $text-xl;
-  }
-}
+@include input-size(sm, $text-sm, $spacing-sm, $spacing-md, calc(2 * $spacing-sm + 1em));
+@include input-size(md, $text-md, $spacing-md, $spacing-lg, calc(2 * $spacing-md + 1em));
+@include input-size(lg, $text-xl, $spacing-xl, $spacing-xl, calc(2 * $spacing-xl + 1em));
 </style>

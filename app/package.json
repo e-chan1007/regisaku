@@ -11,13 +11,13 @@
     "lint": "biome check --write"
   },
   "dependencies": {
-    "@e-chan1007/regisaku-base": "workspace:*",
     "@e-chan1007/regisaku-adapters": "workspace:*",
+    "@e-chan1007/regisaku-base": "workspace:*",
     "nuxt": "^4.0.3",
     "vue": "^3.5.19"
   },
   "devDependencies": {
-    "@iconify-json/material-symbols": "^1.2.32",
+    "@iconify-json/material-symbols": "^1.2.33",
     "typescript": "^5.9.2"
   }
 }

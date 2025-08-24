@@ -4,10 +4,12 @@
     <div class="item-grid">
       <ItemGridCard v-for="item in items" :key="item.id" :item="item" />
     </div>
+    <AddItemSheet />
   </RSPanelBody>
 </template>
 
 <script setup lang="ts">
+import AddItemSheet from "../components/AddItemSheet.vue";
 import ItemGridCard from "../components/ItemGridCard.vue";
 import ItemGridHeader from "../components/ItemGridHeader.vue";
 

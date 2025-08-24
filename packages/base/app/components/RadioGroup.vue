@@ -110,29 +110,20 @@ defineSlots<{
   flex-grow: 1;
 }
 
-.btn-sm {
-  font-size: $text-sm;
-  gap: $spacing-md;
-  height: calc(2 * $spacing-sm + 1em);
-  border-radius: $radius-sm;
-  padding: $spacing-sm $spacing-lg;
+
+@mixin radiogroup-size($name, $font, $gap, $height, $radius, $pad-y, $pad-x) {
+  .btn-#{$name} {
+    font-size: $font;
+    gap: $gap;
+    height: $height;
+    border-radius: $radius;
+    padding: $pad-y $pad-x;
+  }
 }
 
-.btn-md {
-  font-size: $text-md;
-  gap: $spacing-md;
-  height: calc(2 * $spacing-md + 1em);
-  border-radius: $radius-md;
-  padding: $spacing-md $spacing-lg;
-}
-
-.btn-lg {
-  font-size: $text-xl;
-  gap: $spacing-xl;
-  height: calc(2 * $spacing-xl + 1em);
-  border-radius: $radius-md;
-  padding: $spacing-xl $spacing-xl;
-}
+@include radiogroup-size(sm, $text-sm, $spacing-md, calc(2 * $spacing-sm + 1em), $radius-sm, $spacing-sm, $spacing-lg);
+@include radiogroup-size(md, $text-md, $spacing-md, calc(2 * $spacing-md + 1em), $radius-md, $spacing-md, $spacing-lg);
+@include radiogroup-size(lg, $text-xl, $spacing-xl, calc(2 * $spacing-xl + 1em), $radius-md, $spacing-xl, $spacing-xl);
 
 .container {
   display: flex;
