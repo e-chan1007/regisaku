@@ -5,4 +5,5 @@ html, body, #__nuxt {
   height: 100dvh;
   margin: 0;
   font-family: $font-family;
+  overscroll-behavior: none;
 }

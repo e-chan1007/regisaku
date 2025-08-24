@@ -1,14 +1,16 @@
 <template>
   <div class="calc-area">
-    <div class="price-view">
-      <div class="total">
-        <RSHeading level="3">合計</RSHeading>
-        <p class="price">¥{{ total.toLocaleString() }}</p>
-      </div>
-      <div class="change">
-        <RSHeading level="3" v-if="isEnough">お釣り</RSHeading>
-        <RSHeading level="3" v-else>不足額</RSHeading>
-        <p class="price" :class="isEnough ? 'more' : 'less'">¥{{ Math.abs(change).toLocaleString() }}</p>
+    <div class="detail-view">
+      <div class="price-view">
+        <div class="total">
+          <RSHeading level="3">合計</RSHeading>
+          <p class="price">¥{{ total.toLocaleString() }}</p>
+        </div>
+        <div class="change">
+          <RSHeading level="3" v-if="isEnough">お釣り</RSHeading>
+          <RSHeading level="3" v-else>不足額</RSHeading>
+          <p class="price" :class="isEnough ? 'more' : 'less'">¥{{ Math.abs(change).toLocaleString() }}</p>
+        </div>
       </div>
       <div class="method">
         <RSHeading level="3">支払い方法</RSHeading>
@@ -102,20 +104,27 @@ const keypadKeys = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0"];
     display: flex;
     flex-direction: row;
     gap: $spacing-md;
+    padding-block: $spacing-md;
   }
 
-  .price-view {
+  .detail-view {
     display: flex;
     flex-direction: column;
     gap: $spacing-xl;
     flex: 1;
   }
 
+  .price-view {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-4xl;
+  }
+
   .price-input {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: $spacing-xs;
     align-items: end;
   }
 
@@ -187,7 +196,7 @@ const keypadKeys = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0"];
     display: grid;
     grid-template-rows: repeat(4, 1fr);
     grid-template-columns: repeat(3, 1fr);
-    gap: $spacing-sm;
+    gap: $spacing-xs;
   }
 
   .suggestion {

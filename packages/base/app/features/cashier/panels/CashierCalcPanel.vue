@@ -27,7 +27,6 @@ const { isEnough } = useShopState();
   display: flex;
   flex-direction: column;
   height: 100%;
-  gap: $spacing-lg;
 
   .calc-area {
     flex-grow: 1;

@@ -1,10 +1,10 @@
 <template>
   <div class="input-group" :class="[`input-${size}`, { full }]">
-    <button class="btn-decrement" @click="add(-1)">
+    <button class="btn-decrement" @click="modelValue--">
       <Icon name="material-symbols:remove" />
     </button>
-    <input v-bind="$attrs" v-model.number="modelValue" />
-    <button class="btn-increment" @click="add(1)">
+    <input v-bind="$attrs" v-model.number="modelValue" type="number" inputmode="numeric" @blur="onBlur" />
+    <button class="btn-increment" @click="modelValue++">
       <Icon name="material-symbols:add" />
     </button>
   </div>
@@ -15,20 +15,22 @@ import { clamp } from "remeda";
 import type { InputHTMLAttributes } from "vue";
 
 interface Props extends /* @vue-ignore */ InputHTMLAttributes {
-  modelValue?: number;
+  modelValue: number;
   min?: number;
   max?: number;
   full?: boolean;
   size?: "sm" | "md" | "lg";
 }
-const { min, max } = withDefaults(defineProps<Props>(), {
-  full: false,
-  size: "md",
+const { min, max, full = false, size = "md" } = defineProps<Props>();
+const rawModelValue = defineModel<Props["modelValue"]>({ default: 0 });
+const modelValue = computed({
+  get: () => rawModelValue.value,
+  set: (val) => {
+    rawModelValue.value = clamp(val, { min, max });
+  },
 });
-const modelValue = defineModel<Props["modelValue"]>({ default: 0 });
-
-const add = (amount: number) => {
-  modelValue.value = clamp((modelValue.value ?? 0) + amount, { min, max });
+const onBlur = (e: FocusEvent) => {
+  (e.target as HTMLInputElement).value = modelValue.value.toString();
 };
 </script>
 
@@ -41,7 +43,6 @@ const add = (amount: number) => {
   width: fit-content;
   background-color: $color-white;
   border: 2px solid $color-border;
-  border-radius: $radius-md;
   transition: border-color 0.2s;
   overflow: hidden;
 
@@ -59,7 +60,7 @@ const add = (amount: number) => {
     outline: none;
     flex: 1;
     padding: 0;
-    width: 4em;
+    width: 3em;
     min-width: 2rem;
     background: transparent;
     text-align: center;
@@ -98,17 +99,9 @@ const add = (amount: number) => {
       padding: $pad;
     }
   }
-  .btn-decrement {
-    border-top-left-radius: $radius;
-    border-bottom-left-radius: $radius;
-  }
-  .btn-increment {
-    border-top-right-radius: $radius;
-    border-bottom-right-radius: $radius;
-  }
 }
 
-@include countinput-size(sm, $text-sm, calc(2 * $spacing-sm + 1em), $radius-sm, $spacing-sm);
+@include countinput-size(sm, $text-sm, calc(2 * $spacing-sm + 1em), $radius-sm, $spacing-xs);
 @include countinput-size(md, $text-md, calc(2 * $spacing-md + 1em), $radius-md, $spacing-md);
 @include countinput-size(lg, $text-xl, calc(2 * $spacing-xl + 1em), $radius-md, $spacing-xl);
 </style>

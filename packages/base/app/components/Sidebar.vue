@@ -52,11 +52,11 @@ const menuItems = computed(() =>
   display: flex;
   flex-direction: column;
   width: 15rem;
-  height: 100vh;
+  height: 100dvh;
   background: linear-gradient($color-primary-8, $color-primary-9);
   color: $color-text-inverse;
   padding: $spacing-md;
-  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.15);
   transition: width 0.3s ease, padding 0.3s ease;
 }
 
