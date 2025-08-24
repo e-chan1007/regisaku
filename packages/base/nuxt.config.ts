@@ -29,6 +29,7 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "@vueuse/nuxt",
     ColorGenerator,
+    "@pinia/nuxt"
   ],
   css: [join(currentDir, "./app/assets/styles/global.scss")],
   components: [
