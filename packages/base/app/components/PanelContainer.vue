@@ -29,8 +29,6 @@ const props = defineProps<{ viewConfigs: PanelView[] }>();
 const $slots = useSlots();
 const allPanelIds = Object.keys($slots);
 
-import { computed, ref, watch } from "vue";
-
 const currentViewIndex = ref<number>(0);
 const previousView = ref<number>(0);
 watch(currentViewIndex, (_newValue, oldValue) => {

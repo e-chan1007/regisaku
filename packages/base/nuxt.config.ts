@@ -1,25 +1,8 @@
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
-import ColorGenerator from "./modules/color-generator";
+import Configurator from "./modules/config";
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
-
-declare module "nuxt/schema" {
-  interface PublicRuntimeConfig {
-    appName?: string;
-    tabs?: string[];
-    theme?: {
-      colors?: {
-        primary?: string;
-        gray?: string;
-        info?: string;
-        success?: string;
-        error?: string;
-        warning?: string;
-      };
-    };
-  }
-}
 
 export default defineNuxtConfig({
   compatibilityDate: "2025-08-20",
@@ -28,8 +11,8 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxt/scripts",
     "@vueuse/nuxt",
-    ColorGenerator,
-    "@pinia/nuxt"
+    "@pinia/nuxt",
+    Configurator,
   ],
   css: [join(currentDir, "./app/assets/styles/global.scss")],
   components: [
@@ -44,21 +27,8 @@ export default defineNuxtConfig({
       weights: ["100 900"],
     },
   },
-  runtimeConfig: {
-    public: {
-      appName: "regisaku",
-      tabs: ["index", "tab2", "tab3"],
-      theme: {
-        colors: {
-          primary: "#0063b2",
-          gray: "#28292c",
-          info: "#3babf6",
-          success: "#22a06b",
-          error: "#b91c3a",
-          warning: "#c58a1c",
-        },
-      },
-    },
+  alias: {
+    "@e-chan1007/regisaku-base/config": join(currentDir, "./config/index.ts"),
   },
   vite: {
     css: {

@@ -8,7 +8,9 @@
 </template>
 
 <script lang="ts" setup>
-const { appName } = useRuntimeConfig().public;
+import config from "#regisaku-config";
+
+const { appName } = config;
 useHead({
   title: appName,
   titleTemplate: (pageTitle) => `${pageTitle} - ${appName}`,

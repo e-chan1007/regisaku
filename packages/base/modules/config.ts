@@ -2,6 +2,7 @@ import chroma from "chroma-js";
 import { writeFile } from "fs/promises";
 import { defineNuxtModule } from "nuxt/kit";
 import { resolve } from "path";
+import type { RegisakuConfig } from "../config";
 
 const createCSSVariables = (key: string, color: string): string => {
   const colorPalette = chroma
@@ -19,14 +20,21 @@ const createCSSVariables = (key: string, color: string): string => {
 };
 
 export default defineNuxtModule({
-  setup(_options, nuxt) {
+  async setup(_options, nuxt) {
     const buildDir = nuxt.options.buildDir;
     const outputPath = resolve(buildDir, "color-palette.css");
+    const configPath = resolve(
+      nuxt.options.rootDir,
+      "./app/regisaku.config.ts",
+    );
+    nuxt.options.alias["#regisaku-config"] = configPath;
+    nuxt.options.watch.push(configPath);
     nuxt.options.css.unshift(outputPath);
 
-    nuxt.hook("nitro:build:before", async () => {
-      const colors: Record<string, string> =
-        nuxt.options.runtimeConfig.public.theme?.colors ?? {};
+    nuxt.hook("build:before", async () => {
+      const config: RegisakuConfig = (await import(configPath)).default;
+
+      const colors: Record<string, string> = config.theme?.colors ?? {};
 
       const css = [
         ":root {",

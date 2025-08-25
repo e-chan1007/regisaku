@@ -11,8 +11,9 @@
         ".env*"
       ],
       "outputs": [
-        ".next/**",
-        "!.next/cache/**"
+        ".nuxt/**",
+        "dist",
+        "!.nuxt/cache/**"
       ]
     },
     "lint": {

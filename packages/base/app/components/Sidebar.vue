@@ -23,10 +23,11 @@
 </template>
 
 <script setup lang="ts">
+import config from "#regisaku-config";
 import type { TabConfig } from "~/types/Tab";
 
 const { getRoutes, currentRoute } = useRouter();
-const { appName, tabs } = useRuntimeConfig().public;
+const { appName, tabs } = config;
 const collapsed = ref(true);
 
 const toggleSidebar = () => {

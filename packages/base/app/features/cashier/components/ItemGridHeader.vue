@@ -14,8 +14,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-
 const options = ref([
   { id: "option1", label: "Option 1" },
   { id: "option2", label: "Option 2" },

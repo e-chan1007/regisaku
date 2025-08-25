@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@e-chan1007/regisaku-adapter-sdk": "workspace:*",
+    "@e-chan1007/regisaku-adapters": "workspace:*",
+    "@e-chan1007/regisaku-shared": "workspace:*",
     "@headlessui/vue": "^1.7.23",
     "@nuxt/fonts": "^0.11.4",
     "@nuxt/icon": "^2.0.0",
@@ -18,6 +20,7 @@
     "@vueuse/core": "^13.7.0",
     "@vueuse/nuxt": "^13.7.0",
     "chroma-js": "^3.1.2",
+    "defu": "^6.1.4",
     "remeda": "^2.30.0"
   },
   "devDependencies": {

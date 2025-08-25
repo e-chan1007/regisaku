@@ -3,8 +3,11 @@ packages:
   - packages/*
 
 onlyBuiltDependencies:
-  - "@tailwindcss/oxide"
+  - '@parcel/watcher'
+  - '@swc/core'
+  - '@tailwindcss/oxide'
   - better-sqlite3
+  - esbuild
   - lefthook
   - sharp
   - vue-demi

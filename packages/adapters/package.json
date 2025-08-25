@@ -7,9 +7,18 @@
     "build": "tsc",
     "lint": "biome check --write"
   },
-  "sideEffects": false,
-  "exports": {},
+  "exports": {
+    "./db/indexeddb": {
+      "types": "./dist/db/indexeddb/index.d.ts",
+      "import": "./dist/db/indexeddb/index.js"
+    }
+  },
+  "dependencies": {
+    "@e-chan1007/regisaku-adapter-sdk": "workspace:*",
+    "@e-chan1007/regisaku-shared": "workspace:*"
+  },
   "devDependencies": {
+    "@types/node": "^24.3.0",
     "typescript": "^5.9.2"
   }
 }

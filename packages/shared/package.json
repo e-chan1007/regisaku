@@ -1,0 +1,20 @@
+{
+  "name": "@e-chan1007/regisaku-shared",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "lint": "biome check --write"
+  },
+  "sideEffects": false,
+  "exports": {
+    "./types": {
+      "types": "./src/types/index.d.ts",
+      "import": "./src/types/index.js"
+    }
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
