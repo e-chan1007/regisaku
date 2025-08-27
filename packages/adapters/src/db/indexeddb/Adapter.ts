@@ -1,8 +1,19 @@
 import { DatabaseAdapter } from "@e-chan1007/regisaku-adapter-sdk";
 import type { TableName, Tables } from "@e-chan1007/regisaku-shared/types";
-import { IndexedDBQueryBuilder } from "./QueryBuilder.js";
 
 export class IndexedDBAdapter extends DatabaseAdapter {
+  _executeCreate(a: any, d: any) {
+    throw new Error("Method not implemented.");
+  }
+  _executeGet(a: any) {
+    throw new Error("Method not implemented.");
+  }
+  _executeUpdate(a: any, d: any) {
+    throw new Error("Method not implemented.");
+  }
+  _executeDelete(a: any) {
+    throw new Error("Method not implemented.");
+  }
   static context = "client" as const;
 
   async initialize(): Promise<void> {
@@ -10,9 +21,6 @@ export class IndexedDBAdapter extends DatabaseAdapter {
     console.info("Initialized IndexedDB");
   }
 
-  query<TN extends TableName>(_tableName: TN): IndexedDBQueryBuilder<TN> {
-    return new IndexedDBQueryBuilder();
-  }
   exists<TN extends TableName>(
     _tableName: TN,
     _id: Tables[TN]["id"],

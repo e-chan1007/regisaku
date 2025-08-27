@@ -1,6 +1,25 @@
-import type { TableName, Tables } from "@e-chan1007/regisaku-shared/types";
+import type {
+  ArrayOrSingle,
+  MapArrayOrSingle,
+  PartialDynamicField,
+  TableName,
+  Tables,
+} from "@e-chan1007/regisaku-shared/types";
 import type { AdapterContext } from "../shared/AdapterContext.js";
-import type { AbstractQueryBuilder } from "./QueryBuilder.js";
+import {
+  CreateQueryBuilder,
+  DeleteQueryBuilder,
+  GetQueryBuilder,
+  type Query,
+  UpdateQueryBuilder,
+} from "./QueryBuilder/index.js";
+
+export type OperationArgDataMap<TN extends TableName, TR = Tables[TN]> = {
+  create: ArrayOrSingle<PartialDynamicField<TR>>;
+  get: never;
+  update: Partial<TR>;
+  delete: never;
+};
 
 export abstract class AbstractDatabaseAdapter {
   static context: AdapterContext;
@@ -10,35 +29,63 @@ export abstract class AbstractDatabaseAdapter {
 
   async initialize(): Promise<void> {}
 
-  abstract query<TN extends TableName>(tableName: TN): AbstractQueryBuilder<TN>;
-
   abstract exists<TN extends TableName>(
     tableName: TN,
     id: Tables[TN]["id"],
   ): Promise<boolean>;
 
-  abstract insert<TN extends TableName>(
+  create<TN extends TableName, D extends OperationArgDataMap<TN>["create"]>(
     tableName: TN,
-    data: Tables[TN] | Tables[TN][],
-  ): Promise<
-    typeof data extends Tables[TN][] ? Tables[TN]["id"][] : Tables[TN]["id"]
-  >;
+    data: D,
+  ) {
+    return new CreateQueryBuilder(this, tableName, data);
+  }
 
-  abstract update<TN extends TableName>(
-    tableName: TN,
-    id: Tables[TN]["id"],
-    data: Partial<Tables[TN]>,
-  ): Promise<void>;
+  get<TN extends TableName>(tableName: TN) {
+    return new GetQueryBuilder(this, tableName);
+  }
 
-  abstract upsert<TN extends TableName>(
+  update<TN extends TableName, D extends OperationArgDataMap<TN>["update"]>(
     tableName: TN,
-    id: Tables[TN]["id"],
-    data: Tables[TN],
-  ): Promise<void>;
+    data: D,
+  ) {
+    return new UpdateQueryBuilder(this, tableName, data);
+  }
 
-  abstract delete<TN extends TableName>(
-    tableName: TN,
-    id: Tables[TN]["id"],
+  delete<TN extends TableName>(tableName: TN) {
+    return new DeleteQueryBuilder(this, tableName);
+  }
+
+  abstract subscribe<T extends TableName, R = Tables[T]>(
+    tableName: T,
+    callback: (data: R[]) => void,
+  ): () => void;
+
+  /** @internal */
+  abstract _executeCreate<
+    TN extends TableName,
+    Data extends OperationArgDataMap<TN, TR>["create"],
+    TR = Tables[TN],
+  >(
+    query: Query<TN, TR>,
+    data: Data,
+  ): Promise<MapArrayOrSingle<Data, Tables[TN]["id"]>>; // MapArrayOrSingle に TData を渡す
+
+  /** @internal */
+  abstract _executeGet<TN extends TableName, TR = Tables[TN]>(
+    query: Query<TN, TR>,
+  ): Promise<TR[]>;
+
+  /** @internal */
+  abstract _executeUpdate<
+    TN extends TableName,
+    Data extends OperationArgDataMap<TN, TR>["update"],
+    TR = Tables[TN],
+  >(query: Query<TN, TR>, data: Data): Promise<TR[]>;
+
+  /** @internal */
+  abstract _executeDelete<TN extends TableName, TR = Tables[TN]>(
+    query: Query<TN, TR>,
   ): Promise<void>;
 }
 

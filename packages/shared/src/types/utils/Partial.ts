@@ -6,3 +6,5 @@ export type DeepPartial<T> = T extends Array<infer U>
         [P in keyof T]?: T[P] extends Function ? T[P] : DeepPartial<T[P]>;
       }
     : T;
+
+export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
