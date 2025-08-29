@@ -5,6 +5,7 @@
     "moduleResolution": "nodenext",
     "lib": ["esnext"],
     "declaration": true,
+    "skipLibCheck": true,
     "strict": true,
     "outDir": "dist",
     "rootDir": "src"

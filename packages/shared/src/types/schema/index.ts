@@ -1,9 +1,13 @@
-export type Tables = {
+export type Entities = {
   products: import("./Product.js").Product;
-  transactions: import("./Transaction.js").Transaction;
+  sales: import("./Sale.js").Sale;
+  saleItems: import("./Sale.js").SaleItem;
 };
 
-export type TableName = keyof Tables;
+export type EntityName = keyof Entities;
 
+export * from "./Discount.js";
+export * from "./PaymentMethod.js";
 export * from "./Product.js";
-export * from "./Transaction.js";
+export * from "./Sale.js";
+export * from "./Variant.js";
