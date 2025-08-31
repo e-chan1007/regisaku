@@ -1,13 +1,13 @@
 import type { Branded } from "../utils/Brand.js";
 
-export type VariantGroupID = Branded<string, "VariantGroupID">;
-export type VariantID = Branded<string, "VariantID">;
+export type VariantGroupId = Branded<string, "VariantGroupId">;
+export type VariantId = Branded<string, "VariantId">;
 
 export type VariantGroupSelectionMode = "single" | "multiple";
 export type VariantPriceModifier = "add" | "replace";
 
 export interface VariantGroup {
-  id: VariantGroupID;
+  id: VariantGroupId;
   name: string;
   required: boolean;
   selectionMode: VariantGroupSelectionMode;
@@ -15,7 +15,7 @@ export interface VariantGroup {
 }
 
 export interface Variant {
-  id: VariantID;
+  id: VariantId;
   name: string;
   price: number;
   priceModifier: VariantPriceModifier;

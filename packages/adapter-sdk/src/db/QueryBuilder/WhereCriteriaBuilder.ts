@@ -1,33 +1,33 @@
-export type ConditionNode<TR> = {
+export type ConditionNode<EV> = {
   type: "condition";
-  key: keyof TR;
+  key: keyof EV;
   operator: "eq" | "ne" | "gt" | "gte" | "lt" | "lte" | "in" | "notIn";
-  value: TR[keyof TR] | TR[keyof TR][];
+  value: EV[keyof EV] | EV[keyof EV][];
 };
 
 export type SkipCriteriaNode = false | null | undefined;
 
-export type CriteriaNode<TR> =
-  | { type: "and"; conditions: CriteriaNode<TR>[] }
-  | { type: "or"; conditions: CriteriaNode<TR>[] }
-  | ConditionNode<TR>;
+export type CriteriaNode<EV> =
+  | { type: "and"; conditions: CriteriaNode<EV>[] }
+  | { type: "or"; conditions: CriteriaNode<EV>[] }
+  | ConditionNode<EV>;
 
-export type CriteriaNodeLike<TR> = CriteriaNode<TR> | SkipCriteriaNode;
+export type CriteriaNodeLike<EV> = CriteriaNode<EV> | SkipCriteriaNode;
 
-export type CriteriaBuilder<TR> = {
-  eq<K extends keyof TR>(key: K, value: TR[K]): ConditionNode<TR>;
-  ne<K extends keyof TR>(key: K, value: TR[K]): ConditionNode<TR>;
-  gt<K extends keyof TR>(key: K, value: TR[K]): ConditionNode<TR>;
-  gte<K extends keyof TR>(key: K, value: TR[K]): ConditionNode<TR>;
-  lt<K extends keyof TR>(key: K, value: TR[K]): ConditionNode<TR>;
-  lte<K extends keyof TR>(key: K, value: TR[K]): ConditionNode<TR>;
-  in<K extends keyof TR>(key: K, value: TR[K][]): ConditionNode<TR>;
-  notIn<K extends keyof TR>(key: K, value: TR[K][]): ConditionNode<TR>;
-  and(...conds: CriteriaNodeLike<TR>[]): CriteriaNode<TR>;
-  or(...conds: CriteriaNodeLike<TR>[]): CriteriaNode<TR>;
+export type CriteriaBuilder<EV> = {
+  eq<K extends keyof EV>(key: K, value: EV[K]): ConditionNode<EV>;
+  ne<K extends keyof EV>(key: K, value: EV[K]): ConditionNode<EV>;
+  gt<K extends keyof EV>(key: K, value: EV[K]): ConditionNode<EV>;
+  gte<K extends keyof EV>(key: K, value: EV[K]): ConditionNode<EV>;
+  lt<K extends keyof EV>(key: K, value: EV[K]): ConditionNode<EV>;
+  lte<K extends keyof EV>(key: K, value: EV[K]): ConditionNode<EV>;
+  in<K extends keyof EV>(key: K, value: EV[K][]): ConditionNode<EV>;
+  notIn<K extends keyof EV>(key: K, value: EV[K][]): ConditionNode<EV>;
+  and(...conds: CriteriaNodeLike<EV>[]): CriteriaNode<EV>;
+  or(...conds: CriteriaNodeLike<EV>[]): CriteriaNode<EV>;
 };
 
-export function createCriteriaBuilder<TR>(): CriteriaBuilder<TR> {
+export function createCriteriaBuilder<EV>(): CriteriaBuilder<EV> {
   return {
     eq: (key, value) => ({ type: "condition", key, operator: "eq", value }),
     ne: (key, value) => ({ type: "condition", key, operator: "ne", value }),
@@ -44,13 +44,11 @@ export function createCriteriaBuilder<TR>(): CriteriaBuilder<TR> {
     }),
     and: (...conds) => ({
       type: "and",
-      conditions: conds.filter((v): v is CriteriaNode<TR> => !!v),
+      conditions: conds.filter((v): v is CriteriaNode<EV> => !!v),
     }),
     or: (...conds) => ({
       type: "or",
-      conditions: conds.filter((v): v is CriteriaNode<TR> => !!v),
+      conditions: conds.filter((v): v is CriteriaNode<EV> => !!v),
     }),
   };
 }
-
-createCriteriaBuilder().and;

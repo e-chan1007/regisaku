@@ -1,58 +1,70 @@
-import { DatabaseAdapter } from "@e-chan1007/regisaku-adapter-sdk";
-import type { TableName, Tables } from "@e-chan1007/regisaku-shared/types";
+import {
+  type CreateArgs,
+  DatabaseAdapter,
+  type Query,
+} from "@e-chan1007/regisaku-adapter-sdk";
+import type {
+  Entities,
+  EntityName,
+  MapArrayOrSingle,
+} from "@e-chan1007/regisaku-shared/types";
+import { type CreateSchema, create } from "./actions/create.js";
+import { Database } from "./Database.js";
 
-export class IndexedDBAdapter extends DatabaseAdapter {
-  _executeCreate(a: any, d: any) {
-    throw new Error("Method not implemented.");
-  }
-  _executeGet(a: any) {
-    throw new Error("Method not implemented.");
-  }
-  _executeUpdate(a: any, d: any) {
-    throw new Error("Method not implemented.");
-  }
-  _executeDelete(a: any) {
-    throw new Error("Method not implemented.");
-  }
-  static context = "client" as const;
+export interface IndexedDBAdapterConfig {
+  databaseName: string;
+}
 
-  async initialize(): Promise<void> {
-    super.initialize();
-    console.info("Initialized IndexedDB");
+export class IndexedDBAdapter extends DatabaseAdapter<
+  IndexedDBAdapterConfig,
+  CreateSchema
+> {
+  static readonly defaultConfig: IndexedDBAdapterConfig = {
+    databaseName: "regisaku",
+  };
+  private db!: Database;
+
+  override async initialize(): Promise<void> {
+    this.db = new Database(this.config.databaseName);
   }
 
-  exists<TN extends TableName>(
-    _tableName: TN,
-    _id: Tables[TN]["id"],
+  override subscribe<T extends EntityName, R = Entities[T]>(
+    entityName: T,
+    _callback: (data: R[]) => void,
+  ): () => void {
+    console.warn(`subscribe(${entityName}): Not implemented`);
+    return () => {};
+  }
+
+  override async _executeCreate<T extends CreateArgs<CreateSchema>>(
+    ...args: T
+  ): Promise<MapArrayOrSingle<T[1], Entities[T[0]]["id"]>> {
+    return create<T>(this.db, ...args);
+  }
+
+  override _executeRead<EN extends EntityName, EV = Entities[EN]>(
+    query: Query<EN, EV>,
+  ): Promise<EV[]> {
+    throw new Error("Method not implemented.");
+  }
+
+  override _executeUpdate<
+    EN extends EntityName,
+    Data extends Partial<EV>,
+    EV = Entities[EN],
+  >(query: Query<EN, EV>, data: Data): Promise<EV[]> {
+    throw new Error("Method not implemented.");
+  }
+
+  override _executeDelete<EN extends EntityName, EV = Entities[EN]>(
+    query: Query<EN, EV>,
+  ): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
+  _executeExists<EN extends EntityName, EV = Entities[EN]>(
+    query: Query<EN, EV>,
   ): Promise<boolean> {
-    throw new Error("Method not implemented.");
-  }
-  insert<TN extends TableName>(
-    _tableName: TN,
-    _data: Tables[TN] | Tables[TN][],
-  ): Promise<
-    typeof _data extends Tables[TN][] ? Tables[TN]["id"][] : Tables[TN]["id"]
-  > {
-    throw new Error("Method not implemented.");
-  }
-  update<TN extends TableName>(
-    _tableName: TN,
-    _id: Tables[TN]["id"],
-    _data: Partial<Tables[TN]>,
-  ): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-  delete<TN extends TableName>(
-    _tableName: TN,
-    _id: Tables[TN]["id"],
-  ): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-  upsert<TN extends TableName>(
-    _tableName: TN,
-    _id: Tables[TN]["id"],
-    _data: Tables[TN],
-  ): Promise<void> {
     throw new Error("Method not implemented.");
   }
 }

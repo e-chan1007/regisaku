@@ -1,40 +1,53 @@
 import type { Branded } from "../utils/Brand.js";
-import type { DiscountID } from "./Discount.js";
-import type { Product, ProductID } from "./Product.js";
+import type { DiscountId, DiscountType } from "./Discount.js";
+import type { PaymentMethodId } from "./PaymentMethod.js";
+import type { ProductId } from "./Product.js";
 import type {
-  VariantGroupID,
-  VariantID,
+  VariantGroupId,
+  VariantId,
   VariantPriceModifier,
 } from "./Variant.js";
 
-export type SaleID = Branded<string, "SaleID">;
-export type SaleItemID = Branded<string, "SaleItemID">;
+export type SaleId = Branded<string, "SaleId">;
+export type SaleDiscountId = Branded<string, "SaleDiscountId">;
+export type SaleItemId = Branded<string, "SaleItemId">;
+export type SaleItemVariantId = Branded<string, "SaleItemVariantId">;
 
 export interface Sale {
-  id: SaleID;
+  id: SaleId;
   totalPrice: number;
   currency: string;
+  paymentMethodId: PaymentMethodId;
   paymentMethod: string;
   transactionAt: Date;
-  discountId: DiscountID | null;
-  discountAmount: number;
+  discounts: SaleDiscount[];
   items: SaleItem[];
 }
 
+export interface SaleDiscount {
+  id: SaleDiscountId;
+  name: string;
+  type: DiscountType;
+  value: number;
+}
+
 export interface SaleItem {
-  id: SaleItemID;
-  productId: ProductID;
+  id: SaleItemId;
+  productId: ProductId;
   productName: string;
   quantity: number;
+  unitPrice: number;
+  variantUnitPrice: number;
   totalPrice: number;
   variants: SaleItemVariant[];
 }
 
 export interface SaleItemVariant {
-  id: VariantID;
+  id: SaleItemVariantId;
+  variantId: VariantId;
   name: string;
   price: number;
   priceModifier: VariantPriceModifier;
-  groupId: VariantGroupID;
+  groupId: VariantGroupId;
   groupName: string;
 }

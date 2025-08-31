@@ -1,94 +1,110 @@
 import type {
   ArrayOrSingle,
+  Entities,
+  EntityName,
   MapArrayOrSingle,
   PartialDynamicField,
-  TableName,
-  Tables,
+  RootEntityName,
 } from "@e-chan1007/regisaku-shared/types";
 import type { AdapterContext } from "../shared/AdapterContext.js";
 import {
-  CreateQueryBuilder,
   DeleteQueryBuilder,
-  GetQueryBuilder,
   type Query,
+  ReadQueryBuilder,
   UpdateQueryBuilder,
 } from "./QueryBuilder/index.js";
 
-export type OperationArgDataMap<TN extends TableName, TR = Tables[TN]> = {
-  create: ArrayOrSingle<PartialDynamicField<TR>>;
-  get: never;
-  update: Partial<TR>;
+export type OperationArgDataMap<EN extends EntityName, EV = Entities[EN]> = {
+  create: ArrayOrSingle<PartialDynamicField<EV>>;
+  read: never;
+  update: Partial<EV>;
   delete: never;
+  exists: never;
 };
 
-export abstract class AbstractDatabaseAdapter {
+export type DatabaseAdapterConfig = Record<string, any>;
+
+export type CreateArgs<
+  CreateSchema extends Record<RootEntityName, any> = Record<
+    RootEntityName,
+    any
+  >,
+> = {
+  [K in RootEntityName]: [entityName: K, data: ArrayOrSingle<CreateSchema[K]>];
+}[RootEntityName];
+
+export abstract class AbstractDatabaseAdapter<
+  C extends DatabaseAdapterConfig = DatabaseAdapterConfig,
+  CS extends Record<RootEntityName, any> = Record<RootEntityName, any>,
+> {
+  static readonly defaultConfig: DatabaseAdapterConfig = {};
   static context: AdapterContext;
   get context(): AdapterContext {
     return (this.constructor as typeof AbstractDatabaseAdapter).context;
   }
 
+  constructor(protected readonly config: C) {}
+
   async initialize(): Promise<void> {}
 
-  abstract exists<TN extends TableName>(
-    tableName: TN,
-    id: Tables[TN]["id"],
-  ): Promise<boolean>;
+  create<T extends CreateArgs<CS>>(...args: T) {
+    return this._executeCreate<T>(...args);
+  }
 
-  create<TN extends TableName, D extends OperationArgDataMap<TN>["create"]>(
-    tableName: TN,
+  read<EN extends EntityName>(entityName: EN) {
+    return new ReadQueryBuilder(this, entityName);
+  }
+
+  update<EN extends EntityName, D extends OperationArgDataMap<EN>["update"]>(
+    entityName: EN,
     data: D,
   ) {
-    return new CreateQueryBuilder(this, tableName, data);
+    return new UpdateQueryBuilder(this, entityName, data);
   }
 
-  get<TN extends TableName>(tableName: TN) {
-    return new GetQueryBuilder(this, tableName);
+  delete<EN extends EntityName>(entityName: EN) {
+    return new DeleteQueryBuilder(this, entityName);
   }
 
-  update<TN extends TableName, D extends OperationArgDataMap<TN>["update"]>(
-    tableName: TN,
-    data: D,
-  ) {
-    return new UpdateQueryBuilder(this, tableName, data);
-  }
-
-  delete<TN extends TableName>(tableName: TN) {
-    return new DeleteQueryBuilder(this, tableName);
-  }
-
-  abstract subscribe<T extends TableName, R = Tables[T]>(
-    tableName: T,
+  abstract subscribe<T extends EntityName, R = Entities[T]>(
+    entityName: T,
     callback: (data: R[]) => void,
   ): () => void;
 
   /** @internal */
-  abstract _executeCreate<
-    TN extends TableName,
-    Data extends OperationArgDataMap<TN, TR>["create"],
-    TR = Tables[TN],
-  >(
-    query: Query<TN, TR>,
-    data: Data,
-  ): Promise<MapArrayOrSingle<Data, Tables[TN]["id"]>>; // MapArrayOrSingle に TData を渡す
+  abstract _executeCreate<T extends CreateArgs<CS>>(
+    ...args: T
+  ): Promise<MapArrayOrSingle<T[1], Entities[T[0]]["id"]>>;
 
   /** @internal */
-  abstract _executeGet<TN extends TableName, TR = Tables[TN]>(
-    query: Query<TN, TR>,
-  ): Promise<TR[]>;
+  abstract _executeRead<EN extends EntityName, EV = Entities[EN]>(
+    query: Query<EN, EV>,
+  ): Promise<EV[]>;
 
   /** @internal */
   abstract _executeUpdate<
-    TN extends TableName,
-    Data extends OperationArgDataMap<TN, TR>["update"],
-    TR = Tables[TN],
-  >(query: Query<TN, TR>, data: Data): Promise<TR[]>;
+    EN extends EntityName,
+    Data extends OperationArgDataMap<EN, EV>["update"],
+    EV = Entities[EN],
+  >(query: Query<EN, EV>, data: Data): Promise<EV[]>;
 
   /** @internal */
-  abstract _executeDelete<TN extends TableName, TR = Tables[TN]>(
-    query: Query<TN, TR>,
+  abstract _executeDelete<EN extends EntityName, EV = Entities[EN]>(
+    query: Query<EN, EV>,
   ): Promise<void>;
+
+  /** @internal */
+  abstract _executeExists<EN extends EntityName, EV = Entities[EN]>(
+    query: Query<EN, EV>,
+  ): Promise<boolean>;
 }
 
-export type DatabaseAdapterClass = (new () => AbstractDatabaseAdapter) & {
+export type DatabaseAdapterConstructor<
+  C extends DatabaseAdapterConfig = DatabaseAdapterConfig,
+  CS extends Record<EntityName, any> = Record<EntityName, any>,
+> = (new (
+  config: C,
+) => AbstractDatabaseAdapter<C, CS>) & {
   readonly context: AdapterContext;
+  readonly defaultConfig: C;
 };

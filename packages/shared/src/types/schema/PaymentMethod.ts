@@ -1,9 +1,9 @@
 import type { Branded } from "../utils/Brand.js";
 
-export type PaymentMethodID = Branded<string, "PaymentMethodID">;
+export type PaymentMethodId = Branded<string, "PaymentMethodId">;
 
 export interface PaymentMethod {
-  id: PaymentMethodID;
+  id: PaymentMethodId;
   name: string;
   isHidden: boolean;
 }

@@ -1,11 +1,12 @@
 import type { Branded } from "../utils/Brand.js";
 
-export type DiscountID = Branded<string, "DiscountID">;
+export type DiscountId = Branded<string, "DiscountId">;
+export type DiscountType = "percentage" | "fixed";
 
 export interface Discount {
-  id: DiscountID;
+  id: DiscountId;
   name: string;
-  type: "percentage" | "fixed";
+  type: DiscountType;
   value: number;
   isHidden: boolean;
 }

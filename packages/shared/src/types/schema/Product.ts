@@ -1,10 +1,10 @@
 import type { Branded } from "../utils/Brand.js";
 import type { VariantGroup } from "./Variant.js";
 
-export type ProductID = Branded<string, "ProductID">;
+export type ProductId = Branded<string, "ProductId">;
 
 export interface Product {
-  id: ProductID;
+  id: ProductId;
   name: string;
   price: number;
   stock: number;

@@ -1,1 +1,1 @@
-export { IndexedDBAdapter } from "./Adapter.js";
+export { IndexedDBAdapter, IndexedDBAdapterConfig } from "./Adapter.js";

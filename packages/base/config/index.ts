@@ -1,9 +1,15 @@
-import type { DatabaseAdapterClass } from "@e-chan1007/regisaku-adapter-sdk";
-import { IndexedDBAdapter } from "@e-chan1007/regisaku-adapters/db/indexeddb";
+import type {
+  DatabaseAdapterConfig,
+  DatabaseAdapterConstructor,
+} from "@e-chan1007/regisaku-adapter-sdk";
+import {
+  IndexedDBAdapter,
+  type IndexedDBAdapterConfig,
+} from "@e-chan1007/regisaku-adapters/db/indexeddb";
 import type { DeepPartial } from "@e-chan1007/regisaku-shared/types";
 import { defu } from "defu";
 
-export interface RegisakuConfig {
+export interface RegisakuConfig<DBAdapterConfig extends DatabaseAdapterConfig> {
   appName: string;
   tabs: string[];
   theme: {
@@ -16,12 +22,13 @@ export interface RegisakuConfig {
       warning: string;
     };
   };
-  adapters: {
-    db: DatabaseAdapterClass;
+  db: {
+    adapter: DatabaseAdapterConstructor<DBAdapterConfig>;
+    config?: DBAdapterConfig;
   };
 }
 
-const defaultConfig: RegisakuConfig = {
+const defaultConfig: RegisakuConfig<IndexedDBAdapterConfig> = {
   appName: "regisaku",
   tabs: ["index", "tab2", "tab3"],
   theme: {
@@ -34,16 +41,18 @@ const defaultConfig: RegisakuConfig = {
       warning: "#c58a1c",
     },
   },
-  adapters: {
-    db: IndexedDBAdapter,
+  db: {
+    adapter: IndexedDBAdapter,
+    config: IndexedDBAdapter.defaultConfig,
   },
 };
 
-let config: RegisakuConfig | null = null;
-export const defineRegisakuConfig = (
-  newConfig?: DeepPartial<RegisakuConfig>,
-): RegisakuConfig => {
+let config: RegisakuConfig<any> | null = null;
+
+export function defineRegisakuConfig<AC extends DatabaseAdapterConfig>(
+  newConfig?: DeepPartial<RegisakuConfig<AC>>,
+): RegisakuConfig<AC> {
   if (config) return config;
   config = defu(newConfig, defaultConfig);
   return config;
-};
+}

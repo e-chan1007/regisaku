@@ -1,7 +1,7 @@
 export type { Query } from "./AbstractQueryBuilder.js";
 export {
-  CreateQueryBuilder,
   DeleteQueryBuilder,
-  GetQueryBuilder,
+  ReadQueryBuilder,
   UpdateQueryBuilder,
 } from "./QueryBuilder.js";
+export * from "./WhereCriteriaBuilder.js";

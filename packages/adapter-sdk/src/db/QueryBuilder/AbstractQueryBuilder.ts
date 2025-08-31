@@ -1,4 +1,4 @@
-import type { TableName, Tables } from "@e-chan1007/regisaku-shared/types";
+import type { Entities, EntityName } from "@e-chan1007/regisaku-shared/types";
 import type { AbstractDatabaseAdapter } from "../DatabaseAdapter.js";
 import {
   type CriteriaBuilder,
@@ -6,13 +6,18 @@ import {
   createCriteriaBuilder,
 } from "./WhereCriteriaBuilder.js";
 
-export type DatabaseOperation = "create" | "get" | "update" | "delete";
+export type DatabaseOperation =
+  | "create"
+  | "read"
+  | "update"
+  | "delete"
+  | "exists";
 
-export type Query<TN extends TableName, TR = Tables[TN]> = {
-  tableName: TN;
-  where?: CriteriaNode<TR>;
+export type Query<EN extends EntityName, EV = Entities[EN]> = {
+  entityName: EN;
+  where?: CriteriaNode<EV>;
   orderBy?: {
-    key: keyof TR;
+    key: keyof EV;
     order: "asc" | "desc";
   };
   limit?: number;
@@ -20,29 +25,30 @@ export type Query<TN extends TableName, TR = Tables[TN]> = {
 };
 
 export abstract class AbstractQueryBuilder<
-  TN extends TableName = TableName,
-  TR = Tables[TN],
+  EN extends EntityName = EntityName,
+  EV = Entities[EN],
   Result = unknown,
 > {
-  private _where?: CriteriaNode<TR>;
+  private _where?: CriteriaNode<EV>;
   private _orderBy?: {
-    key: keyof TR;
+    key: keyof EV;
     order: "asc" | "desc";
   };
   private _limit?: number;
   private _offset?: number;
 
   constructor(
-    protected _adapter: AbstractDatabaseAdapter,
-    protected _tableName: TN,
+    protected readonly _adapter: AbstractDatabaseAdapter,
+    protected readonly _entityName: EN,
   ) {}
 
-  where(builder: (q: CriteriaBuilder<TR>) => CriteriaNode<TR>): this {
-    const q = createCriteriaBuilder<TR>();
+  where(builder: (q: CriteriaBuilder<EV>) => CriteriaNode<EV>): this {
+    const q = createCriteriaBuilder<EV>();
     this._where = builder(q);
     return this;
   }
-  orderBy<K extends keyof TR>(key: K, order: "asc" | "desc"): this {
+
+  orderBy<K extends keyof EV>(key: K, order: "asc" | "desc"): this {
     this._orderBy = { key, order };
     return this;
   }
@@ -57,9 +63,9 @@ export abstract class AbstractQueryBuilder<
     return this;
   }
 
-  build(): Query<TN, TR> {
+  build(): Query<EN, EV> {
     return {
-      tableName: this._tableName,
+      entityName: this._entityName,
       where: this._where,
       orderBy: this._orderBy,
       limit: this._limit,

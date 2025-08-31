@@ -12,9 +12,16 @@
     "./types": {
       "types": "./src/types/index.d.ts",
       "import": "./src/types/index.js"
+    },
+    "./utils": {
+      "types": "./src/utils/index.d.ts",
+      "import": "./src/utils/index.js"
     }
   },
   "devDependencies": {
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "nanoid": "^5.1.5"
   }
 }

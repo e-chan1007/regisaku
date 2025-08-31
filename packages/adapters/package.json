@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "@e-chan1007/regisaku-adapter-sdk": "workspace:*",
-    "@e-chan1007/regisaku-shared": "workspace:*"
+    "@e-chan1007/regisaku-shared": "workspace:*",
+    "dexie": "^4.2.0"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
