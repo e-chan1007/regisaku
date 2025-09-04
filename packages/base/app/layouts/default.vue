@@ -12,8 +12,10 @@ import config from "#regisaku-config";
 
 const { appName } = config;
 useHead({
+  htmlAttrs: { lang: "ja" },
   title: appName,
   titleTemplate: (pageTitle) => `${pageTitle} - ${appName}`,
+  meta: [{ name: "description", content: `${appName} - レジアプリ` }],
 });
 </script>
 

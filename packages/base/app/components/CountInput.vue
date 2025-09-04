@@ -3,7 +3,7 @@
     <button class="btn-decrement" @click="modelValue--" title="減らす">
       <Icon name="material-symbols:remove" />
     </button>
-    <input v-bind="$attrs" v-model.number="modelValue" type="number" inputmode="numeric" @blur="onBlur" />
+    <input v-bind="$attrs" v-model.number="modelValue" type="number" inputmode="numeric" @blur="onBlur" title="数量を変更" />
     <button class="btn-increment" @click="modelValue++" title="増やす">
       <Icon name="material-symbols:add" />
     </button>

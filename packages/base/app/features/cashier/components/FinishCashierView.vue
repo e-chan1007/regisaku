@@ -21,7 +21,7 @@
     <div class="details-info">
       <div class="detail-item">
         <span class="label">お会計日時:</span>
-        <span class="value">{{ transactionDate?.toLocaleString() }}</span>
+        <span class="value" data-allow-mismatch>{{ transactionDate?.toLocaleString("ja-JP") }}</span>
       </div>
       <div class="detail-item">
         <span class="label">取引ID:</span>

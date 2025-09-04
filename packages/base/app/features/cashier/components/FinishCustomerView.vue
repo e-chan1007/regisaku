@@ -19,8 +19,8 @@
           <span class="value">{{ formatYen(changeAmount) }}</span>
         </div>
       </div>
-      <div class="time">
-        {{ transactionDate?.toLocaleString() }}
+      <div class="time" data-allow-mismatch>
+        {{ transactionDate?.toLocaleString("ja-JP") }}
       </div>
     </div>
   </div>

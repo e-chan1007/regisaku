@@ -55,10 +55,10 @@
           >
             {{ key }}
           </RSButton>
-          <RSButton type="square" size="lg" variant="secondary" @click="receivedAmountStr = receivedAmountStr.slice(0, -1)">
+          <RSButton type="square" size="lg" variant="secondary" @click="receivedAmountStr = receivedAmountStr.slice(0, -1)" title="1文字削除">
             <Icon name="material-symbols:backspace" />
           </RSButton>
-          <RSButton type="square" size="lg"  color="error" variant="secondary" @click="receivedAmount = 0">
+          <RSButton type="square" size="lg"  color="error" variant="secondary" @click="receivedAmount = 0" title="すべて削除">
             <Icon name="material-symbols:delete-forever" />
           </RSButton>
         </div>
