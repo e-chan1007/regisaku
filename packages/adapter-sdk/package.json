@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "tsup src/index.ts --format esm --dts --watch",
     "build": "tsup src/index.ts --format esm --dts",
+    "prepare": "pnpm run build",
     "lint": "biome check --write"
   },
   "sideEffects": false,
