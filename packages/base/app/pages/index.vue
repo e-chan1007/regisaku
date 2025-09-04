@@ -2,25 +2,26 @@
   <div id="page-root" class="root">
     <RSPanelContainer :viewConfigs="viewConfigs">
       <template #item-grid="slotProps">
-        <CashierItemGridPanel v-bind="slotProps" />
+        <ItemGridPanel v-bind="slotProps" />
       </template>
-      <template #cart="slotProps">
-        <CashierCartPanel v-bind="slotProps" />
+      <template #order="slotProps">
+        <OrderListPanel v-bind="slotProps" />
       </template>
       <template #calc="slotProps">
-        <CashierCalcPanel v-bind="slotProps" />
+        <CalcPanel v-bind="slotProps" />
       </template>
-      <template #panel-4="slotProps">
-        <RSPanel4 v-bind="slotProps" />
+      <template #finish="slotProps">
+        <FinishPanel v-bind="slotProps" />
       </template>
     </RSPanelContainer>
   </div>
 </template>
 
 <script lang="ts" setup>
-import CashierCalcPanel from "~/features/cashier/panels/CashierCalcPanel.vue";
-import CashierCartPanel from "~/features/cashier/panels/CashierCartPanel.vue";
-import CashierItemGridPanel from "~/features/cashier/panels/CashierItemGridPanel.vue";
+import CalcPanel from "~/features/cashier/panels/CalcPanel.vue";
+import FinishPanel from "~/features/cashier/panels/FinishPanel.vue";
+import ItemGridPanel from "~/features/cashier/panels/ItemGridPanel.vue";
+import OrderListPanel from "~/features/cashier/panels/OrderListPanel.vue";
 import type { PanelView } from "~/types/Panel";
 
 definePageMeta({
@@ -38,13 +39,13 @@ const viewConfigs: PanelView[] = [
       width: "70%",
     },
     {
-      id: "cart",
+      id: "order",
       width: "30%",
     },
   ],
   [
     {
-      id: "cart",
+      id: "order",
       width: "30%",
     },
     {
@@ -54,12 +55,8 @@ const viewConfigs: PanelView[] = [
   ],
   [
     {
-      id: "calc",
-      width: "70%",
-    },
-    {
-      id: "panel-4",
-      width: "30%",
+      id: "finish",
+      width: "100%",
     },
   ],
 ];

@@ -1,6 +1,6 @@
 <template>
   <RSPanelBody no-padding class="container">
-    <ItemGridHeader />
+    <ItemGridHeader v-model:searchQuery="itemSearchQuery" />
     <div class="item-grid">
       <ItemGridCard v-for="item in items" :key="item.id" :item="item" />
     </div>
@@ -9,11 +9,14 @@
 </template>
 
 <script setup lang="ts">
+import type { Product } from "@e-chan1007/regisaku-shared/types";
 import AddItemSheet from "../components/AddItemSheet.vue";
 import ItemGridCard from "../components/ItemGridCard.vue";
 import ItemGridHeader from "../components/ItemGridHeader.vue";
 
-const items = [
+const itemSearchQuery = ref("");
+
+const _items = [
   { id: "1", name: "Item 1", price: 100 },
   { id: "2", name: "Item 2", price: 200 },
   { id: "3", name: "Item 3", price: 300 },
@@ -22,7 +25,20 @@ const items = [
   { id: "6", name: "Item 6", price: 600 },
   { id: "7", name: "Item 7", price: 700 },
   { id: "8", name: "Item 8", price: 800 },
-];
+] as Product[];
+
+const items = computed(() => {
+  if (!itemSearchQuery.value) {
+    return _items;
+  }
+  return _items.filter((item) => {
+    const itemName = item.name.toLowerCase();
+    return itemSearchQuery.value
+      .toLowerCase()
+      .split(/\s+/)
+      .every((term) => itemName.includes(term));
+  });
+});
 </script>
 
 <style lang="scss" scoped>

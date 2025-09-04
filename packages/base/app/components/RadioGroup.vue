@@ -26,32 +26,30 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup generic="RadioItem extends object">
 import {
   RadioGroup as HeadlessRadioGroup,
   RadioGroupOption as HeadlessRadioGroupOption,
 } from "@headlessui/vue";
 
-type Option = InstanceType<typeof HeadlessRadioGroupOption>["$props"] & {
-  label: string;
-};
+type Option = InstanceType<typeof HeadlessRadioGroupOption>["$props"] &
+  RadioItem;
 
-interface Props<T extends Option = Option> {
-  options: T[];
+interface Props {
+  options: Option[];
 }
 
-withDefaults(defineProps<Props & { size?: "sm" | "md" | "lg" }>(), {
-  options: () => [],
-  size: "md",
-});
-const modelValue = defineModel<Props["options"][number]>();
+const { options = [], size = "md" } = defineProps<
+  Props & { size?: "sm" | "md" | "lg" }
+>();
+const modelValue = defineModel<RadioItem>();
 
 defineSlots<{
   default: ({
     option,
     checked,
   }: {
-    option: Props["options"][number];
+    option: RadioItem;
     checked: boolean;
   }) => unknown;
   label: () => unknown;

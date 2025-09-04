@@ -1,10 +1,10 @@
 <template>
   <div class="input-group" :class="[`input-${size}`, { full }]">
-    <button class="btn-decrement" @click="modelValue--">
+    <button class="btn-decrement" @click="modelValue--" title="減らす">
       <Icon name="material-symbols:remove" />
     </button>
     <input v-bind="$attrs" v-model.number="modelValue" type="number" inputmode="numeric" @blur="onBlur" />
-    <button class="btn-increment" @click="modelValue++">
+    <button class="btn-increment" @click="modelValue++" title="増やす">
       <Icon name="material-symbols:add" />
     </button>
   </div>
@@ -62,12 +62,25 @@ const onBlur = (e: FocusEvent) => {
     padding: 0;
     width: 3em;
     min-width: 2rem;
-    background: transparent;
+    background-color: transparent;
     text-align: center;
+    transition: background-color 0.2s ease;
+
+    &:hover, &:focus {
+      background-color: $color-gray-0;
+    }
 
     &:focus {
       outline: none;
     }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    appearance: textfield;
   }
 
   button {

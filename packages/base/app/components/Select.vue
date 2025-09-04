@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <Listbox v-model="modelValue" v-slot="{ open }">
-      <ListboxButton class="select" :class="[`select-${props.size}`, { open }]">
-        {{ modelValue?.label }}
+      <ListboxButton class="select" :class="[`select-${size}`, { open }]">
+        {{ modelValue?.[labelKey as unknown as keyof typeof modelValue] ?? "選択してください" }}
         <Icon name="material-symbols:expand-more" />
       </ListboxButton>
       <ListboxOptions class="dropdown">
@@ -12,14 +12,17 @@
           v-bind="option"
           :value="option"
         >
-          {{ option.label }}
+          {{ option[labelKey as unknown as keyof typeof option] }}
         </ListboxOption>
       </ListboxOptions>
     </Listbox>
   </div>
 </template>
 
-<script lang="ts" setup>
+<script
+  lang="ts"
+  setup
+  generic="LabelKey extends PropertyKey = 'label'">
 import {
   Listbox,
   ListboxButton,
@@ -28,15 +31,16 @@ import {
 } from "@headlessui/vue";
 
 type Option = InstanceType<typeof ListboxOption>["$props"] & {
-  label: string;
+  [key in LabelKey]: string;
 };
 
-interface Props<T extends Option = Option> {
-  options: T[];
+interface Props {
+  options: Option[];
+  labelKey?: LabelKey;
   size?: "sm" | "md" | "lg";
 }
 
-const props = withDefaults(defineProps<Props>(), { size: "md" });
+const { labelKey = "label", size = "md" } = defineProps<Props>();
 const modelValue = defineModel<Props["options"][number]>();
 </script>
 

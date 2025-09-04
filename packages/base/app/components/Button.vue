@@ -116,7 +116,7 @@ defineSlots<{
         background-color: list.nth($palette, 8);
       }
 
-      &:active {
+      &:not(:disabled):active {
         background-color: list.nth($palette, 10);
       }
 
@@ -133,7 +133,7 @@ defineSlots<{
         background-color: list.nth($palette, 3);
       }
 
-      &:active {
+      &:not(:disabled):active {
         background-color: list.nth($palette, 4);
       }
 
@@ -151,7 +151,7 @@ defineSlots<{
         background-color: list.nth($palette, 1);
       }
 
-      &:active {
+      &:not(:disabled):active {
         background-color: list.nth($palette, 2);
       }
 
@@ -169,7 +169,7 @@ defineSlots<{
         border: 2px solid list.nth($palette, 2);
       }
 
-      &:active {
+      &:not(:disabled):active {
         background-color: list.nth($palette, 3);
         border: 2px solid list.nth($palette, 3);
       }

@@ -1,7 +1,7 @@
 <template>
   <label class="input-group" :class="[`input-${props.size}`, { full }]">
     <slot name="prepend" />
-    <input v-bind="$attrs" />
+    <input v-model="modelValue" v-bind="$attrs" />
     <slot name="append" />
   </label>
 </template>
@@ -12,6 +12,7 @@ import type { InputHTMLAttributes } from "vue";
 interface Props extends /* @vue-ignore */ InputHTMLAttributes {
   full?: boolean;
   size?: "sm" | "md" | "lg";
+  modelValue?: string | number;
 }
 defineSlots<{
   prepend: () => unknown;
@@ -19,6 +20,7 @@ defineSlots<{
 }>();
 
 const props = withDefaults(defineProps<Props>(), { full: false, size: "md" });
+const modelValue = useModel(props, "modelValue");
 </script>
 
 <style lang="scss" scoped>
@@ -33,7 +35,11 @@ const props = withDefaults(defineProps<Props>(), { full: false, size: "md" });
   background-color: $color-white;
   border: 2px solid $color-border;
   border-radius: $radius-md;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background-color 0.2s;
+
+  &:hover, &:focus-within {
+    background-color: $color-gray-0;
+  }
 
   &:focus-within {
     border: 2px solid $color-primary-5;
@@ -50,6 +56,7 @@ const props = withDefaults(defineProps<Props>(), { full: false, size: "md" });
     padding: 0;
     background: transparent;
     font: inherit;
+
     &:focus {
       outline: none;
     }

@@ -1,5 +1,5 @@
 import type { Branded } from "../utils/Brand.js";
-import type { DiscountId, DiscountType } from "./Discount.js";
+import type { DiscountType } from "./Discount.js";
 import type { PaymentMethodId } from "./PaymentMethod.js";
 import type { ProductId } from "./Product.js";
 import type { VariantGroupId, VariantId } from "./Variant.js";

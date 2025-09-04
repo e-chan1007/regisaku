@@ -1,2 +1,2 @@
-import type { PublicRuntimeConfig } from "nuxt/schema";
-export type ColorKey = keyof PublicRuntimeConfig["theme"]["colors"];
+import type { RegisakuConfig } from "~~/config";
+export type ColorKey = keyof RegisakuConfig["theme"]["colors"];

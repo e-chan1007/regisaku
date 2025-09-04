@@ -1,5 +1,5 @@
 <template>
-  <RSButton full v-bind="btnProps" @click="showingGoPrev ? prev() : next()">
+  <RSButton full v-bind="btnProps" @click="showingGoPrev ? prev() : next()" :disabled="disabled">
     <template #prepend>
       <Icon name="material-symbols:chevron-left" :class="['icon', !showingGoPrev && 'hidden']" />
     </template>
@@ -20,6 +20,7 @@ interface Props {
   next: () => void;
   prevLabel: string;
   nextLabel: string;
+  disabled?: boolean;
 }
 
 const props = defineProps<Props>();

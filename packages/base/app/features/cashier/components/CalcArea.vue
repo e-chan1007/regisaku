@@ -4,18 +4,19 @@
       <div class="price-view">
         <div class="total">
           <RSHeading level="3">合計</RSHeading>
-          <p class="price">¥{{ total.toLocaleString() }}</p>
+          <p class="price">{{ formatYen(totalAmount) }}</p>
         </div>
         <div class="change">
-          <RSHeading level="3" v-if="isEnough">お釣り</RSHeading>
+          <RSHeading level="3" v-if="isReceivedAmountEnough">お釣り</RSHeading>
           <RSHeading level="3" v-else>不足額</RSHeading>
-          <p class="price" :class="isEnough ? 'more' : 'less'">¥{{ Math.abs(change).toLocaleString() }}</p>
+          <p class="price" :class="isReceivedAmountEnough ? 'more' : 'less'">{{ formatYen(Math.abs(changeAmount)) }}</p>
         </div>
       </div>
       <div class="method">
         <RSHeading level="3">支払い方法</RSHeading>
         <RSSelect
-          v-model="paymentMethodOption"
+          v-model="paymentMethod"
+          label-key="name"
           :options="paymentMethods"
         />
       </div>
@@ -25,23 +26,23 @@
           <RSButton
             v-for="suggestion in receivedPriceSuggestions"
             :key="suggestion"
-            @click="received = suggestion"
+            @click="receivedAmount = suggestion"
             size="sm"
-            :color="suggestion === total ? 'primary' : 'gray'"
+            :color="suggestion === totalAmount ? 'primary' : 'gray'"
             variant="secondary"
           >
-            ¥{{ suggestion.toLocaleString() }}
+            {{ formatYen(suggestion) }}
           </RSButton>
         </div>
       </div>
     </div>
 
     <div class="price-input">
-      <div class="received" :class="isEnough ? 'more' : 'less'">
+      <div class="received" :class="isReceivedAmountEnough ? 'more' : 'less'">
         <div class="header">
           <h2 class="label">お預かり</h2>
         </div>
-        <p class="price">¥{{ received.toLocaleString() }}</p>
+        <p class="price">¥{{ receivedAmountStr }}</p>
       </div>
       <div class="input-container">
         <div class="keypad">
@@ -50,14 +51,14 @@
             size="lg"
             v-for="key in keypadKeys"
             :key="key"
-            @click="receivedStr += key"
+            @click="receivedAmountStr += key"
           >
             {{ key }}
           </RSButton>
-          <RSButton type="square" size="lg" variant="secondary" @click="receivedStr = receivedStr.slice(0, -1)">
+          <RSButton type="square" size="lg" variant="secondary" @click="receivedAmountStr = receivedAmountStr.slice(0, -1)">
             <Icon name="material-symbols:backspace" />
           </RSButton>
-          <RSButton type="square" size="lg"  color="error" variant="secondary" @click="received = 0">
+          <RSButton type="square" size="lg"  color="error" variant="secondary" @click="receivedAmount = 0">
             <Icon name="material-symbols:delete-forever" />
           </RSButton>
         </div>
@@ -68,33 +69,29 @@
 
 <script lang="ts" setup>
 import type { RSSelect } from "#components";
+import { useShopStore } from "~/stores/shop";
+import { useTransactionStore } from "~/stores/transaction";
 import { generatePaymentSuggestions } from "../utils/paymentSuggestions";
 
-const { total, received, receivedStr, change, paymentMethod, isEnough } =
-  useShopState();
+const { paymentMethods } = storeToRefs(useShopStore());
+const {
+  totalAmount,
+  receivedAmount,
+  receivedAmountStr,
+  changeAmount,
+  paymentMethod,
+  isReceivedAmountEnough,
+} = storeToRefs(useTransactionStore());
 
 const receivedPriceSuggestions = computed(() =>
-  generatePaymentSuggestions(total.value)
+  generatePaymentSuggestions(totalAmount.value)
     .filter(
       (suggestion) =>
-        received.value === 0 ||
-        suggestion.toString().startsWith(receivedStr.value),
+        receivedAmount.value === 0 ||
+        suggestion.toString().startsWith(receivedAmountStr.value),
     )
     .slice(0, 10),
 );
-
-const paymentMethods = [
-  { label: "現金", id: "cash" },
-  { label: "クレジットカード", id: "credit" },
-  { label: "電子マネー", id: "e-money" },
-] as const satisfies InstanceType<typeof RSSelect>["options"];
-
-const paymentMethodOption = computed({
-  get: () => paymentMethods.find((method) => method.id === paymentMethod.value),
-  set: (value: (typeof paymentMethods)[number]) => {
-    paymentMethod.value = value.id;
-  },
-});
 
 const keypadKeys = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0"];
 </script>

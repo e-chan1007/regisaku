@@ -9,7 +9,9 @@ import {
 import type { DeepPartial } from "@e-chan1007/regisaku-shared/types";
 import { defu } from "defu";
 
-export interface RegisakuConfig<DBAdapterConfig extends DatabaseAdapterConfig> {
+export interface RegisakuConfig<
+  DBAdapterConfig extends DatabaseAdapterConfig = DatabaseAdapterConfig,
+> {
   appName: string;
   tabs: string[];
   theme: {

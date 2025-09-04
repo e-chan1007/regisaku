@@ -1,23 +1,28 @@
 <template>
-  <div class="price-view">
+  <div class="price-view" :class="{ rotated }" @click="rotated = !rotated">
     <div class="total-container">
       <RSHeading level="2">合計</RSHeading>
-      <p class="price">¥{{ total.toLocaleString() }}</p>
+      <p class="price">{{ formatYen(totalAmount) }}</p>
     </div>
     <div class="received-container">
       <RSHeading level="3">お預かり</RSHeading>
-      <p class="price">¥{{ received.toLocaleString() }}</p>
+      <p class="price">{{ formatYen(receivedAmount) }}</p>
     </div>
     <div class="change-container">
-      <RSHeading level="3" v-if="isEnough">お釣り</RSHeading>
+      <RSHeading level="3" v-if="isReceivedAmountEnough">お釣り</RSHeading>
       <RSHeading level="3" v-else>不足額</RSHeading>
-      <p class="price" :class="isEnough ? 'more' : 'less'">¥{{ Math.abs(change).toLocaleString() }}</p>
+      <p class="price" :class="isReceivedAmountEnough ? 'more' : 'less'">{{ formatYen(Math.abs(changeAmount)) }}</p>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const { total, received, change, isEnough } = useShopState();
+import { useTransactionStore } from "~/stores/transaction";
+
+const { totalAmount, receivedAmount, changeAmount, isReceivedAmountEnough } =
+  storeToRefs(useTransactionStore());
+
+const rotated = ref(true);
 </script>
 
 <style lang="scss" scoped>
@@ -28,7 +33,11 @@ const { total, received, change, isEnough } = useShopState();
     "received change" auto / 1fr 1fr;
   background-color: $color-primary-0;
   border-radius: $radius-md;
-  transform: rotate(180deg);
+  transition: transform ease-in-out 0.4s;
+
+  &.rotated {
+    transform: rotate(180deg);
+  }
 }
 
 .total-container, .received-container, .change-container {

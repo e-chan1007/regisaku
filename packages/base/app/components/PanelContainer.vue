@@ -36,22 +36,30 @@ watch(currentViewIndex, (_newValue, oldValue) => {
 });
 
 const isTransitioning = ref<boolean>(false);
-const transitionDuration = 350;
-const cssTransitionDuration = `${transitionDuration}ms`;
 
-const setViewIndex = (index: number) => {
+const TRANSITION_DEFAULT_DURATION = 350;
+const transitionDuration = ref(TRANSITION_DEFAULT_DURATION);
+const cssTransitionDuration = computed(() => `${transitionDuration.value}ms`);
+
+const setViewIndex = (index: number, skipTransition: boolean = false) => {
   if (isTransitioning.value || index < 0 || index >= props.viewConfigs.length) {
     return;
   }
   isTransitioning.value = true;
-  currentViewIndex.value = index;
-  setTimeout(() => {
-    isTransitioning.value = false;
-  }, transitionDuration);
+  transitionDuration.value = skipTransition ? 0 : TRANSITION_DEFAULT_DURATION;
+
+  nextTick(() => {
+    currentViewIndex.value = index;
+    setTimeout(() => {
+      isTransitioning.value = false;
+    }, transitionDuration.value);
+  });
 };
 
-const next = () => setViewIndex(currentViewIndex.value + 1);
-const prev = () => setViewIndex(currentViewIndex.value - 1);
+const next = (skipTransition: boolean = false) =>
+  setViewIndex(currentViewIndex.value + 1, skipTransition);
+const prev = (skipTransition: boolean = false) =>
+  setViewIndex(currentViewIndex.value - 1, skipTransition);
 
 const exposed = computed(() => ({
   setViewIndex,
@@ -83,8 +91,12 @@ const getPanelStyle = (panelId: string) => {
     return { left, width };
   } else {
     const prevViewConfig = props.viewConfigs[previousView.value];
-    const panelInPrevView = prevViewConfig?.find((p) => p.id === panelId);
-    const width = panelInPrevView?.width ?? "50%";
+    const width =
+      prevViewConfig?.find((p) => p.id === panelId)?.width ??
+      props.viewConfigs
+        .find((panels) => panels.some((p) => p.id === panelId))
+        ?.find((p) => p.id === panelId)?.width ??
+      "0%";
 
     const firstVisiblePanelId = currentView.value[0]?.id ?? "";
     const firstVisiblePanelIndex = allPanelIds.indexOf(firstVisiblePanelId);

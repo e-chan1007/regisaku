@@ -13,6 +13,7 @@ interface Props extends Partial<PanelChildProps> {
 
 const props = defineProps<Props>() as Required<Props>;
 defineSlots<{ default: (props: PanelChildProps) => unknown }>();
+defineExpose(props);
 </script>
 
 <style lang="scss" scoped>

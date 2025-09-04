@@ -1,10 +1,10 @@
 <template>
-  <div class="cart-item">
-    <div class="name">{{ item.name }}</div>
+  <div class="order-item">
+    <div class="name">{{ item.product.name }}</div>
     <div class="actions">
-      <div class="price">¥{{ (item.price * count).toLocaleString() }}</div>
-      <RSCountInput v-model="count" size="sm" :max="999" :min="0" />
-      <RSButton variant="text" color="error" type="square" size="sm">
+      <div class="price">{{ formatYen(item.product.price * quantity) }}</div>
+      <RSCountInput v-model="quantity" size="sm" :max="999" :min="0" />
+      <RSButton variant="text" color="error" type="square" size="sm" @click="quantity = 0" title="削除">
         <Icon name="material-symbols:delete-outline" />
       </RSButton>
     </div>
@@ -13,21 +13,19 @@
 
 <script lang="ts" setup>
 import { RSCountInput } from "#components";
+import { type OrderItem, useOrderStore } from "~/stores/order";
 
 interface Props {
-  item: {
-    id: string;
-    name: string;
-    price: number;
-  };
+  item: OrderItem;
 }
 
-const props = defineProps<Props>();
-const count = ref(1);
+const { item } = defineProps<Props>();
+const { quantityOf } = useOrderStore();
+const quantity = quantityOf(item.id);
 </script>
 
 <style lang="scss" scoped>
-.cart-item {
+.order-item {
   display: flex;
   flex-direction: column;
   gap: $spacing-xs;

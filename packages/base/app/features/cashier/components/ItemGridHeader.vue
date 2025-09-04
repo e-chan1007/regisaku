@@ -1,23 +1,33 @@
 <template>
   <div class="item-grid-header">
-    <RSInput full placeholder="商品を検索">
-      <template #prepend>
-        <Icon name="material-symbols:search" />
-      </template>
-    </RSInput>
-    <RSRadioGroup v-model="selectedOption" :options="options">
+    <div class="search">
+      <RSInput full placeholder="商品を検索" v-model="searchQuery">
+        <template #prepend>
+          <Icon name="material-symbols:search" />
+        </template>
+      </RSInput>
+      <RSButton variant="text" type="square" color="gray" size="sm" title="キーワードを空にする" @click="searchQuery = ''">
+        <Icon name="material-symbols:backspace" />
+      </RSButton>
+    </div>
+    <!-- <RSRadioGroup v-model="selectedOption" :options="options">
       <template #="{ option }">
         <span class="content">{{ option.label }}</span>
       </template>
-    </RSRadioGroup>
+    </RSRadioGroup> -->
   </div>
 </template>
 
 <script lang="ts" setup>
+const props = defineProps<{
+  searchQuery: string;
+}>();
+const searchQuery = useModel(props, "searchQuery");
+
 const options = ref([
-  { id: "option1", label: "Option 1" },
-  { id: "option2", label: "Option 2" },
-  { id: "option3", label: "Option 3" },
+  { id: "option1", label: "Category 1" },
+  { id: "option2", label: "Category 2" },
+  { id: "option3", label: "Category 3" },
 ]);
 const selectedOption = ref(options.value[0]);
 </script>
@@ -29,6 +39,13 @@ const selectedOption = ref(options.value[0]);
   gap: $spacing-sm;
   border-bottom: 1px solid $color-border;
   padding: $spacing-md;
+}
+
+.search {
+  display: flex;
+  gap: $spacing-xs;
+  flex-direction: row;
+  align-items: center;
 }
 
 </style>

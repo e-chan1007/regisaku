@@ -1,3 +1,4 @@
-import { nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
 
-export const createId = <T extends string>(): T => nanoid<T>();
+const nanoid = customAlphabet("0123456789ACDEFGHJKMNPQRTUVWXY", 8);
+export const createId = <T extends string>(): T => nanoid() as T;

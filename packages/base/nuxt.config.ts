@@ -30,6 +30,9 @@ export default defineNuxtConfig({
   alias: {
     "@e-chan1007/regisaku-base/config": join(currentDir, "./config/index.ts"),
   },
+  pinia: {
+    storesDirs: [],
+  },
   vite: {
     css: {
       preprocessorOptions: {
