@@ -4,7 +4,6 @@ export type VariantGroupId = Branded<string, "VariantGroupId">;
 export type VariantId = Branded<string, "VariantId">;
 
 export type VariantGroupSelectionMode = "single" | "multiple";
-export type VariantPriceModifier = "add" | "replace";
 
 export interface VariantGroup {
   id: VariantGroupId;
@@ -18,5 +17,4 @@ export interface Variant {
   id: VariantId;
   name: string;
   price: number;
-  priceModifier: VariantPriceModifier;
 }

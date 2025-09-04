@@ -7,7 +7,6 @@ export interface Product {
   id: ProductId;
   name: string;
   price: number;
-  stock: number;
   isHidden: boolean;
   variantGroups: VariantGroup[];
 }
