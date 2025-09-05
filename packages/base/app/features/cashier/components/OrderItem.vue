@@ -13,7 +13,6 @@
 
 <script lang="ts" setup>
 import { RSCountInput } from "#components";
-import { type OrderItem, useOrderStore } from "~/stores/order";
 
 interface Props {
   item: OrderItem;

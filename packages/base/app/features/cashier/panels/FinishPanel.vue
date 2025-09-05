@@ -17,7 +17,6 @@
 
 <script lang="ts" setup>
 import type { RSPanelBody } from "#components";
-import { useTransactionStore } from "~/stores/transaction";
 import FinishCashierView from "../components/FinishCashierView.vue";
 import FinishCustomerView from "../components/FinishCustomerView.vue";
 

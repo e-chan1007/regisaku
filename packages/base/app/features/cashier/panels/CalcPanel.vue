@@ -16,7 +16,6 @@
 
 <script lang="ts" setup>
 import type { RSPanelBody } from "#components";
-import { useTransactionStore } from "~/stores/transaction";
 import CalcArea from "../components/CalcArea.vue";
 import CalcPriceView from "../components/CalcPriceView.vue";
 

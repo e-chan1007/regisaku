@@ -13,23 +13,27 @@
     "@e-chan1007/regisaku-adapters": "workspace:*",
     "@e-chan1007/regisaku-shared": "workspace:*",
     "@headlessui/vue": "^1.7.23",
+    "@iconify-json/material-symbols": "^1.2.33",
     "@nuxt/fonts": "^0.11.4",
     "@nuxt/icon": "^2.0.0",
     "@nuxt/scripts": "^0.11.13",
+    "@pinia/nuxt": "0.11.2",
     "@unhead/vue": "^2.0.14",
+    "@vite-pwa/assets-generator": "^1.0.0",
+    "@vite-pwa/nuxt": "1.0.4",
     "@vueuse/core": "^13.7.0",
     "@vueuse/nuxt": "^13.7.0",
     "chroma-js": "^3.1.2",
     "defu": "^6.1.4",
-    "remeda": "^2.30.0"
+    "pinia": "^3.0.3",
+    "remeda": "^2.30.0",
+    "sass-embedded": "^1.90.0",
+    "sharp": "^0.34.3",
+    "sharp-ico": "^0.1.5"
   },
   "devDependencies": {
-    "@iconify-json/material-symbols": "^1.2.33",
-    "@pinia/nuxt": "0.11.2",
     "@types/chroma-js": "^3.1.1",
     "nuxt": "^4.0.3",
-    "pinia": "^3.0.3",
-    "sass-embedded": "^1.90.0",
     "typescript": "^5.9.2",
     "vue": "^3.5.19"
   }

@@ -69,8 +69,6 @@
 
 <script lang="ts" setup>
 import type { RSSelect } from "#components";
-import { useShopStore } from "~/stores/shop";
-import { useTransactionStore } from "~/stores/transaction";
 import { generatePaymentSuggestions } from "../utils/paymentSuggestions";
 
 const { paymentMethods } = storeToRefs(useShopStore());

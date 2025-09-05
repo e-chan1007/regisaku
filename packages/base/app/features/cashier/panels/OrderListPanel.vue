@@ -23,7 +23,6 @@
 
 <script setup lang="ts">
 import type { RSPanelBody } from "#components";
-import { useOrderStore } from "~/stores/order";
 import OrderItem from "../components/OrderItem.vue";
 import PanelNavigationButton from "../components/PanelNavigationButton.vue";
 

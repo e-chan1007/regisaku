@@ -12,7 +12,6 @@
 
 <script lang="ts" setup>
 import type { Product } from "@e-chan1007/regisaku-shared/types";
-import { useOrderStore } from "~/stores/order";
 
 interface Props {
   item: Product;

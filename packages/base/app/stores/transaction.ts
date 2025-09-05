@@ -1,8 +1,6 @@
 import type { PaymentMethod, SaleId } from "@e-chan1007/regisaku-shared/types";
 import { createId } from "@e-chan1007/regisaku-shared/utils";
 import { RS_MAX_DIGITS } from "~~/shared/limits";
-import { useOrderStore } from "./order";
-import { useShopStore } from "./shop";
 
 export const useTransactionStore = defineStore("transaction", () => {
   const { clearOrders } = useOrderStore();

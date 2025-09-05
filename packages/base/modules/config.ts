@@ -1,8 +1,10 @@
 import chroma from "chroma-js";
+import { defu } from "defu";
 import { writeFile } from "fs/promises";
 import { defineNuxtModule } from "nuxt/kit";
 import { resolve } from "path";
 import type { RegisakuConfig } from "../config";
+import pwaManifestBase from "../pwa/manifest.json";
 
 const createCSSVariables = (key: string, color: string): string => {
   const colorPalette = chroma
@@ -30,10 +32,19 @@ export default defineNuxtModule({
     nuxt.options.alias["#regisaku-config"] = configPath;
     nuxt.options.watch.push(configPath);
     nuxt.options.css.unshift(outputPath);
+    const config: RegisakuConfig = (await import(configPath)).default;
+
+    nuxt.options.pwa.manifest = defu(
+      {
+        name: config.appName,
+        short_name: config.appName,
+        description: `${config.appName} - レジアプリ`,
+        theme_color: config.theme.colors.primary,
+      },
+      pwaManifestBase,
+    );
 
     nuxt.hook("build:before", async () => {
-      const config: RegisakuConfig = (await import(configPath)).default;
-
       const colors: Record<string, string> = config.theme?.colors ?? {};
 
       const css = [

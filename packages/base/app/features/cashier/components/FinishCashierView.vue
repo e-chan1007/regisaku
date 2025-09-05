@@ -36,8 +36,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useTransactionStore } from "~/stores/transaction";
-
 const {
   saleId,
   transactionDate,

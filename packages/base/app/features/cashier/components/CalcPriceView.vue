@@ -17,8 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useTransactionStore } from "~/stores/transaction";
-
 const { totalAmount, receivedAmount, changeAmount, isReceivedAmountEnough } =
   storeToRefs(useTransactionStore());
 
