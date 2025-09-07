@@ -9,3 +9,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   console.log("initialized on", adapter.context);
   nuxtApp.provide("db", adapter);
 });
+
+declare module "#app" {
+  interface NuxtApp {
+    $db?: InstanceType<typeof config.db.adapter>;
+  }
+}

@@ -15,40 +15,40 @@ import type {
 } from "@e-chan1007/regisaku-shared/types";
 import type { Table as DexieTable } from "dexie";
 
-export type DiscountTable = Discount;
-export type PaymentMethodTable = PaymentMethod;
-export type ProductTable = Omit<Product, "variantGroups">;
-export type SaleTable = Omit<Sale, "discount" | "items">;
-export type SaleDiscountTable = SaleDiscount & {
+export type DiscountTableRow = Discount;
+export type PaymentMethodTableRow = PaymentMethod;
+export type ProductTableRow = Omit<Product, "variantGroups">;
+export type SaleTableRow = Omit<Sale, "discounts" | "items">;
+export type SaleDiscountTableRow = SaleDiscount & {
   saleId: SaleId;
 };
-export type SaleItemTable = Omit<SaleItem, "variants"> & {
+export type SaleItemTableRow = Omit<SaleItem, "variants"> & {
   saleId: SaleId;
 };
-export type SaleItemVariantTable = SaleItemVariant & {
+export type SaleItemVariantTableRow = SaleItemVariant & {
   saleItemId: SaleItemId;
 };
-export type VariantGroupTable = Omit<VariantGroup, "variants"> & {
+export type VariantGroupTableRow = Omit<VariantGroup, "variants"> & {
   productId: ProductId;
 };
-export type VariantTable = Variant & {
+export type VariantTableRow = Variant & {
   variantGroupId: VariantGroupId;
 };
 
-export type Tables = {
-  discounts: DiscountTable;
-  paymentMethods: PaymentMethodTable;
-  products: ProductTable;
-  sales: SaleTable;
-  saleDiscounts: SaleDiscountTable;
-  saleItems: SaleItemTable;
-  saleItemVariants: SaleItemVariantTable;
-  variantGroups: VariantGroupTable;
-  variants: VariantTable;
+export type TableRow = {
+  discounts: DiscountTableRow;
+  paymentMethods: PaymentMethodTableRow;
+  products: ProductTableRow;
+  sales: SaleTableRow;
+  saleDiscounts: SaleDiscountTableRow;
+  saleItems: SaleItemTableRow;
+  saleItemVariants: SaleItemVariantTableRow;
+  variantGroups: VariantGroupTableRow;
+  variants: VariantTableRow;
 };
 
-export type TableName = keyof Tables;
+export type TableName = keyof TableRow;
 
 export type DexieTables = {
-  [K in TableName]: DexieTable<Tables[K], Tables[K]["id"]>;
+  [K in TableName]: DexieTable<TableRow[K], TableRow[K]["id"]>;
 };

@@ -1,5 +1,5 @@
 import type { Branded } from "../utils/Brand.js";
-import type { DiscountType } from "./Discount.js";
+import type { DiscountId, DiscountType } from "./Discount.js";
 import type { PaymentMethodId } from "./PaymentMethod.js";
 import type { ProductId } from "./Product.js";
 import type { VariantGroupId, VariantId } from "./Variant.js";
@@ -16,12 +16,15 @@ export interface Sale {
   paymentMethodId: PaymentMethodId;
   paymentMethod: string;
   transactionAt: Date;
+  updatedAt: Date;
   discounts: SaleDiscount[];
   items: SaleItem[];
+  note: string;
 }
 
 export interface SaleDiscount {
   id: SaleDiscountId;
+  discountId: DiscountId;
   name: string;
   type: DiscountType;
   value: number;
@@ -32,8 +35,9 @@ export interface SaleItem {
   productId: ProductId;
   productName: string;
   quantity: number;
+  /** 商品の単価 */
   unitPrice: number;
-  variantUnitPrice: number;
+  /** 商品の合計金額 ((unitPrice + sum(variants.price)) * quantity) */
   totalPrice: number;
   variants: SaleItemVariant[];
 }

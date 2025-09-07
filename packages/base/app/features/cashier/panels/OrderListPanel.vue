@@ -15,7 +15,7 @@
         <h3>合計</h3>
         <div class="amount">{{ formatYen(totalAmount) }}</div>
       </div>
-      <PanelNavigationButton v-bind="panelProps" :toggle-view-index="1" prev-label="商品の再選択" next-label="お会計" :disabled="totalAmount <= 0" />
+      <PanelNavigationButton v-bind="panelProps" :toggle-view-index="1" prev-label="商品の再選択" next-label="お会計" :disabled="orders.length <= 0" />
       <RSButton variant="text" color="gray" size="sm" full @click="cancelAll" :disabled="totalAmount <= 0">すべてキャンセル</RSButton>
     </div>
   </RSPanelBody>

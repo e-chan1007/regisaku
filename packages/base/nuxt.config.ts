@@ -37,6 +37,11 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: [join(baseDir, "./app/stores")],
   },
+  nitro: {
+    experimental: {
+      websocket: true,
+    },
+  },
   vite: {
     css: {
       preprocessorOptions: {
@@ -52,7 +57,7 @@ export default defineNuxtConfig({
   },
   pwa: {
     devOptions: {
-      enabled: true,
+      // enabled: true,
     },
     registerType: "autoUpdate",
     workbox: {

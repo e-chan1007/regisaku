@@ -5,17 +5,18 @@
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
-    "lint": "biome check --write"
+    "lint": "biome check --write",
+    "prepare": "pnpm run build"
   },
   "sideEffects": false,
   "exports": {
     "./types": {
-      "types": "./src/types/index.d.ts",
-      "import": "./src/types/index.js"
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.js"
     },
     "./utils": {
-      "types": "./src/utils/index.d.ts",
-      "import": "./src/utils/index.js"
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js"
     }
   },
   "devDependencies": {

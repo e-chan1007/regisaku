@@ -2,6 +2,7 @@
   <RSPanelBody no-padding class="container">
     <ItemGridHeader v-model:searchQuery="itemSearchQuery" />
     <div class="item-grid">
+      <div v-if="status === 'loading'">読み込み中...</div>
       <ItemGridCard v-for="item in items" :key="item.id" :item="item" />
     </div>
     <AddItemSheet />
@@ -9,29 +10,19 @@
 </template>
 
 <script setup lang="ts">
-import type { Product } from "@e-chan1007/regisaku-shared/types";
 import AddItemSheet from "../components/AddItemSheet.vue";
 import ItemGridCard from "../components/ItemGridCard.vue";
 import ItemGridHeader from "../components/ItemGridHeader.vue";
 
 const itemSearchQuery = ref("");
 
-const _items = [
-  { id: "1", name: "Item 1", price: 100 },
-  { id: "2", name: "Item 2", price: 200 },
-  { id: "3", name: "Item 3", price: 300 },
-  { id: "4", name: "Item 4", price: 400 },
-  { id: "5", name: "Item 5", price: 500 },
-  { id: "6", name: "Item 6", price: 600 },
-  { id: "7", name: "Item 7", price: 700 },
-  { id: "8", name: "Item 8", price: 800 },
-] as Product[];
+const { products, status } = useProductDatabase();
 
 const items = computed(() => {
   if (!itemSearchQuery.value) {
-    return _items;
+    return products.value;
   }
-  return _items.filter((item) => {
+  return products.value.filter((item) => {
     const itemName = item.name.toLowerCase();
     return itemSearchQuery.value
       .toLowerCase()
