@@ -112,7 +112,8 @@ defineSlots<{
       background: list.nth($palette, 9);
       color: $color-text-inverse;
 
-      &:hover, &:focus {
+      &:not(:disabled):hover,
+      &:not(:disabled):focus {
         background-color: list.nth($palette, 8);
       }
 
@@ -129,7 +130,8 @@ defineSlots<{
       background-color: list.nth($palette, 2);
       color: list.nth($palette, 9);
 
-      &:hover, &:focus {
+      &:not(:disabled):hover,
+      &:not(:disabled):focus {
         background-color: list.nth($palette, 3);
       }
 
@@ -147,7 +149,8 @@ defineSlots<{
       background-color: transparent;
       color: list.nth($palette, 8);
 
-      &:hover, &:focus {
+      &:not(:disabled):hover,
+      &:not(:disabled):focus {
         background-color: list.nth($palette, 1);
       }
 
@@ -164,7 +167,8 @@ defineSlots<{
       background-color: transparent;
       color: list.nth($palette, 8);
 
-      &:hover, &:focus {
+      &:not(:disabled):hover,
+      &:not(:disabled):focus {
         background-color: list.nth($palette, 2);
         border: 2px solid list.nth($palette, 2);
       }

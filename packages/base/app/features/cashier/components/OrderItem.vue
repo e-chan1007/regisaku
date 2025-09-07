@@ -5,7 +5,7 @@
       <div class="price">{{ formatYen(item.product.price * quantity) }}</div>
       <RSCountInput v-model="quantity" size="sm" :max="999" :min="0" />
       <RSButton variant="text" color="error" type="square" size="sm" @click="quantity = 0" title="削除">
-        <Icon name="material-symbols:delete-outline" />
+        <Icon name="material-symbols:backspace" />
       </RSButton>
     </div>
   </div>
@@ -29,7 +29,7 @@ const quantity = quantityOf(item.id);
   flex-direction: column;
   gap: $spacing-xs;
   width: 100%;
-  padding: $spacing-lg;
+  padding: $spacing-lg $spacing-md;
 }
 
 .name {

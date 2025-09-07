@@ -2,6 +2,9 @@
   <RSPanelBody #="panelProps" class="container" no-padding ref="panelBody">
     <div class="order-header">
       <h2>オーダー</h2>
+      <RSButton variant="text" color="error" type="square" size="sm" @click="cancelAll" :disabled="orders.length <= 0" title="すべてキャンセル">
+        <Icon name="material-symbols:delete" />
+      </RSButton>
     </div>
     <div class="order-item-list" ref="orderItemList">
       <OrderItem v-for="item in orders" :key="item.id" :item="item" />
@@ -16,7 +19,6 @@
         <div class="amount">{{ formatYen(totalAmount) }}</div>
       </div>
       <PanelNavigationButton v-bind="panelProps" :toggle-view-index="1" prev-label="商品の再選択" next-label="お会計" :disabled="orders.length <= 0" />
-      <RSButton variant="text" color="gray" size="sm" full @click="cancelAll" :disabled="totalAmount <= 0">すべてキャンセル</RSButton>
     </div>
   </RSPanelBody>
 </template>
@@ -58,6 +60,10 @@ watchArray(orders, async (newValue, oldValue) => {
 }
 
 .order-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   padding: $spacing-md;
 
   h2 {

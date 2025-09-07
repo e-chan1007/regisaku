@@ -1,8 +1,9 @@
 <template>
   <RSPanelBody no-padding class="container">
     <ItemGridHeader v-model:searchQuery="itemSearchQuery" />
+    <div v-if="status === 'loading'">読み込み中...</div>
+    <div v-if="status === 'ready' && items.length === 0">商品が登録されていません</div>
     <div class="item-grid">
-      <div v-if="status === 'loading'">読み込み中...</div>
       <ItemGridCard v-for="item in items" :key="item.id" :item="item" />
     </div>
     <AddItemSheet />
@@ -37,6 +38,7 @@ const items = computed(() => {
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: $color-gray-0;
 }
 
 .item-grid {
@@ -44,7 +46,6 @@ const items = computed(() => {
   grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
   align-content: start;
   gap: $spacing-md;
-  background-color: $color-gray-0;
   padding: $spacing-md;
   overflow-y: auto;
   min-height: 0;

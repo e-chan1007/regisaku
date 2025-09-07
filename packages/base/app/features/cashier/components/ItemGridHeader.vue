@@ -5,10 +5,12 @@
         <template #prepend>
           <Icon name="material-symbols:search" />
         </template>
+        <template #append>
+          <RSButton variant="text" type="square" color="gray" size="sm" title="キーワードを空にする" @click="searchQuery = ''">
+            <Icon name="material-symbols:backspace" />
+          </RSButton>
+        </template>
       </RSInput>
-      <RSButton variant="text" type="square" color="gray" size="sm" title="キーワードを空にする" @click="searchQuery = ''">
-        <Icon name="material-symbols:backspace" />
-      </RSButton>
     </div>
     <!-- <RSRadioGroup v-model="selectedOption" :options="options">
       <template #="{ option }">
@@ -39,11 +41,12 @@ const selectedOption = ref(options.value[0]);
   gap: $spacing-sm;
   border-bottom: 1px solid $color-border;
   padding: $spacing-md;
+  background-color: $color-white;
 }
 
 .search {
   display: flex;
-  gap: $spacing-xs;
+  gap: $spacing-md;
   flex-direction: row;
   align-items: center;
 }
