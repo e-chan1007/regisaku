@@ -26,7 +26,7 @@ import { RSButton, RSInput } from "#components";
 definePageMeta({
   tab: {
     label: "商品管理",
-    icon: "material-symbols:two-pager",
+    icon: "material-symbols:home-storage",
   },
   keepalive: true,
 });

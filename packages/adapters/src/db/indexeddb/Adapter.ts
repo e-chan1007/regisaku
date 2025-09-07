@@ -18,6 +18,7 @@ import { createId } from "@e-chan1007/regisaku-shared/utils";
 import { liveQuery } from "dexie";
 import * as R from "remeda";
 import { Database } from "./Database.js";
+import { IndexedDBError } from "./DatabaseError.js";
 import type {
   ProductTableRow,
   SaleDiscountTableRow,
@@ -116,11 +117,46 @@ export class IndexedDBAdapter extends DatabaseAdapter<IndexedDBAdapterConfig> {
     id: ProductId,
     updates: Partial<Omit<Product, "id">>,
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw new IndexedDBError("Method not implemented.");
   }
   override deleteProduct(id: ProductId): Promise<void> {
     return this.db.products.delete(id);
   }
+  override deleteAllProducts(): Promise<void> {
+    return this.db.products.clear();
+  }
+
+  override subscribeToProducts(
+    onInsert: (product: Product) => void,
+    onUpdate: (product: Product) => void,
+    onDelete: (productId: ProductId) => void,
+  ): () => unknown {
+    let prevProducts: Product[] = [];
+    const observable = liveQuery(() => this.getProducts());
+    const subscription = observable.subscribe({
+      next: (currentProducts) => {
+        const added = currentProducts.filter(
+          (p) => !prevProducts.some((pp) => pp.id === p.id),
+        );
+
+        const deleted = prevProducts.filter(
+          (pp) => !currentProducts.some((p) => p.id === pp.id),
+        );
+
+        const updated = currentProducts.filter((p) =>
+          prevProducts.some((pp) => pp.id === p.id && !R.isDeepEqual(p, pp)),
+        );
+
+        added.forEach(onInsert);
+        updated.forEach(onUpdate);
+        deleted.forEach((p) => onDelete(p.id));
+
+        prevProducts = currentProducts;
+      },
+    });
+    return () => subscription.unsubscribe();
+  }
+
   override async addSale(
     sale: DeepOmit<Sale, "id" | "updatedAt">,
   ): Promise<Sale> {
@@ -191,38 +227,6 @@ export class IndexedDBAdapter extends DatabaseAdapter<IndexedDBAdapterConfig> {
       discounts: finalSaleDiscounts,
     };
   }
-
-  override subscribeToProducts(
-    onInsert: (product: Product) => void,
-    onUpdate: (product: Product) => void,
-    onDelete: (productId: ProductId) => void,
-  ): () => unknown {
-    let prevProducts: Product[] = [];
-    const observable = liveQuery(() => this.getProducts());
-    const subscription = observable.subscribe({
-      next: (currentProducts) => {
-        const added = currentProducts.filter(
-          (p) => !prevProducts.some((pp) => pp.id === p.id),
-        );
-
-        const deleted = prevProducts.filter(
-          (pp) => !currentProducts.some((p) => p.id === pp.id),
-        );
-
-        const updated = currentProducts.filter((p) =>
-          prevProducts.some((pp) => pp.id === p.id && !R.isDeepEqual(p, pp)),
-        );
-
-        added.forEach(onInsert);
-        updated.forEach(onUpdate);
-        deleted.forEach((p) => onDelete(p.id));
-
-        prevProducts = currentProducts;
-      },
-    });
-    return () => subscription.unsubscribe();
-  }
-
   override getSales(): Promise<Sale[]> {
     return this.db.transaction(
       "r",
@@ -259,11 +263,45 @@ export class IndexedDBAdapter extends DatabaseAdapter<IndexedDBAdapterConfig> {
     id: SaleId,
     updates: Partial<Omit<Sale, "id" | "transactionAt" | "updatedAt">>,
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw new IndexedDBError("Method not implemented.");
   }
   override async deleteSale(id: SaleId): Promise<void> {
     return this.db.sales.delete(id);
   }
+  override deleteAllSales(): Promise<void> {
+    return this.db.sales.clear();
+  }
+  override subscribeToSales(
+    onInsert: (sale: Sale) => void,
+    onUpdate: (sale: Sale) => void,
+    onDelete: (saleId: SaleId) => void,
+  ): () => unknown {
+    let prevSales: Sale[] = [];
+    const observable = liveQuery(() => this.getSales());
+    const subscription = observable.subscribe({
+      next: (currentSales) => {
+        const added = currentSales.filter(
+          (s) => !prevSales.some((ps) => ps.id === s.id),
+        );
+
+        const deleted = prevSales.filter(
+          (ps) => !currentSales.some((s) => s.id === ps.id),
+        );
+
+        const updated = currentSales.filter((s) =>
+          prevSales.some((ps) => ps.id === s.id && !R.isDeepEqual(s, ps)),
+        );
+
+        added.forEach(onInsert);
+        updated.forEach(onUpdate);
+        deleted.forEach((s) => onDelete(s.id));
+
+        prevSales = currentSales;
+      },
+    });
+    return () => subscription.unsubscribe();
+  }
+
   override async addPaymentMethod(
     method: Omit<PaymentMethod, "id">,
   ): Promise<PaymentMethod> {
@@ -278,9 +316,42 @@ export class IndexedDBAdapter extends DatabaseAdapter<IndexedDBAdapterConfig> {
     id: PaymentMethod["id"],
     updates: Partial<Omit<PaymentMethod, "id">>,
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw new IndexedDBError("Method not implemented.");
   }
   override async deletePaymentMethod(id: PaymentMethod["id"]): Promise<void> {
     return this.db.paymentMethods.delete(id);
+  }
+  override deleteAllPaymentMethods(): Promise<void> {
+    return this.db.paymentMethods.clear();
+  }
+  override subscribeToPaymentMethods(
+    onInsert: (method: PaymentMethod) => void,
+    onUpdate: (method: PaymentMethod) => void,
+    onDelete: (methodId: PaymentMethod["id"]) => void,
+  ): () => unknown {
+    let prevMethods: PaymentMethod[] = [];
+    const observable = liveQuery(() => this.getPaymentMethods());
+    const subscription = observable.subscribe({
+      next: (currentMethods) => {
+        const added = currentMethods.filter(
+          (m) => !prevMethods.some((pm) => pm.id === m.id),
+        );
+
+        const deleted = prevMethods.filter(
+          (pm) => !currentMethods.some((m) => m.id === pm.id),
+        );
+
+        const updated = currentMethods.filter((m) =>
+          prevMethods.some((pm) => pm.id === m.id && !R.isDeepEqual(m, pm)),
+        );
+
+        added.forEach(onInsert);
+        updated.forEach(onUpdate);
+        deleted.forEach((m) => onDelete(m.id));
+
+        prevMethods = currentMethods;
+      },
+    });
+    return () => subscription.unsubscribe();
   }
 }

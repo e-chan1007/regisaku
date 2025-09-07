@@ -1,15 +1,18 @@
 import type {
   Branded,
   Product,
-  VariantId,
+  Variant,
+  VariantGroup,
 } from "@e-chan1007/regisaku-shared/types";
 import { createId } from "@e-chan1007/regisaku-shared/utils";
 
 export type OrderItemId = Branded<string, "OrderItemId">;
+
+export type SelectedVariant = [VariantGroup, Variant[]];
 export interface OrderItem {
   id: OrderItemId;
   product: Product;
-  selectedVariants: VariantId[];
+  selectedVariants: SelectedVariant[];
   quantity: number;
 }
 
@@ -18,13 +21,16 @@ export const useOrderStore = defineStore("orders", () => {
 
   const addOrder = (
     product: Product,
-    selectedVariants: VariantId[],
+    selectedVariants: SelectedVariant[],
     quantity: number,
   ) => {
     const existingOrder = orders.value.find(
       (order) =>
         order.product.id === product.id &&
-        hasSameItems(order.selectedVariants, selectedVariants),
+        hasSameItems(
+          order.selectedVariants.flatMap(([_, v]) => v),
+          selectedVariants.flatMap(([_, v]) => v),
+        ),
     );
     if (existingOrder) {
       updateOrder(existingOrder.id, existingOrder.quantity + quantity);
@@ -41,7 +47,7 @@ export const useOrderStore = defineStore("orders", () => {
   const updateOrder = (
     itemId: OrderItemId,
     quantity: number,
-    selectedVariants?: VariantId[],
+    selectedVariants?: SelectedVariant[],
   ) => {
     const existingOrder = orders.value.find((order) => order.id === itemId);
     if (existingOrder) {

@@ -1,5 +1,4 @@
 import type { PaymentMethod, SaleId } from "@e-chan1007/regisaku-shared/types";
-import { createId } from "@e-chan1007/regisaku-shared/utils";
 import { RS_MAX_DIGITS } from "~~/shared/limits";
 
 export const useTransactionStore = defineStore("transaction", () => {
@@ -7,7 +6,7 @@ export const useTransactionStore = defineStore("transaction", () => {
   const { totalAmount } = storeToRefs(useOrderStore());
   const { paymentMethods } = storeToRefs(useShopStore());
 
-  const saleId = ref<SaleId>(createId());
+  const saleId = ref<SaleId | null>(null);
   const transactionDate = ref(new Date());
   const receivedAmount = ref(0);
 
@@ -25,7 +24,7 @@ export const useTransactionStore = defineStore("transaction", () => {
   );
 
   function resetTransaction() {
-    saleId.value = createId();
+    saleId.value = null;
     clearOrders();
     receivedAmount.value = 0;
   }

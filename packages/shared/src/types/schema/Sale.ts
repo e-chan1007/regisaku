@@ -12,6 +12,8 @@ export type SaleItemVariantId = Branded<string, "SaleItemVariantId">;
 export interface Sale {
   id: SaleId;
   totalPrice: number;
+  receivedAmount: number;
+  changeAmount: number;
   currency: string;
   paymentMethodId: PaymentMethodId;
   paymentMethod: string;

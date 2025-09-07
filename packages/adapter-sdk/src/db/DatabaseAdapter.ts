@@ -35,7 +35,7 @@ export abstract class AbstractDatabaseAdapter<
     updates: Partial<Omit<Product, "id">>,
   ): Promise<void>;
   abstract deleteProduct(id: ProductId): Promise<void>;
-
+  abstract deleteAllProducts(): Promise<void>;
   abstract subscribeToProducts(
     onInsert: (product: Product) => void,
     onUpdate: (product: Product) => void,
@@ -49,6 +49,12 @@ export abstract class AbstractDatabaseAdapter<
     updates: Partial<Omit<Sale, "id" | "transactionAt" | "updatedAt">>,
   ): Promise<void>;
   abstract deleteSale(id: SaleId): Promise<void>;
+  abstract deleteAllSales(): Promise<void>;
+  abstract subscribeToSales(
+    onInsert: (sale: Sale) => void,
+    onUpdate: (sale: Sale) => void,
+    onDelete: (saleId: SaleId) => void,
+  ): () => void;
 
   abstract addPaymentMethod(
     method: Omit<PaymentMethod, "id">,
@@ -59,6 +65,12 @@ export abstract class AbstractDatabaseAdapter<
     updates: Partial<Omit<PaymentMethod, "id">>,
   ): Promise<void>;
   abstract deletePaymentMethod(id: PaymentMethod["id"]): Promise<void>;
+  abstract deleteAllPaymentMethods(): Promise<void>;
+  abstract subscribeToPaymentMethods(
+    onInsert: (method: PaymentMethod) => void,
+    onUpdate: (method: PaymentMethod) => void,
+    onDelete: (methodId: PaymentMethod["id"]) => void,
+  ): () => void;
 }
 
 export type DatabaseAdapterConstructor<

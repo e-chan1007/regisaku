@@ -5,6 +5,7 @@ interface ProductDatabaseComposable {
   add: DatabaseAdapter["addProduct"];
   update: DatabaseAdapter["updateProduct"];
   delete: DatabaseAdapter["deleteProduct"];
+  deleteAll: DatabaseAdapter["deleteAllProducts"];
   products: Ref<Product[]>;
   status: Ref<"loading" | "ready" | "error">;
 }
@@ -25,6 +26,9 @@ export function useProductDatabase(): ProductDatabaseComposable {
         throw new Error("Database adapter is not initialized");
       },
       delete: async () => {
+        throw new Error("Database adapter is not initialized");
+      },
+      deleteAll: async () => {
         throw new Error("Database adapter is not initialized");
       },
       products,
@@ -72,6 +76,7 @@ export function useProductDatabase(): ProductDatabaseComposable {
       add: $db.addProduct.bind($db),
       update: $db.updateProduct.bind($db),
       delete: $db.deleteProduct.bind($db),
+      deleteAll: $db.deleteAllProducts.bind($db),
       products,
       status,
     };
@@ -123,11 +128,15 @@ export function useProductDatabase(): ProductDatabaseComposable {
       }),
     update: (id, updates) =>
       $fetch(`/api/products/${id}`, {
-        method: "PUT",
+        method: "PATCH",
         body: updates,
       }),
     delete: (id) =>
       $fetch(`/api/products/${id}`, {
+        method: "DELETE",
+      }),
+    deleteAll: () =>
+      $fetch(`/api/products`, {
         method: "DELETE",
       }),
     products,
