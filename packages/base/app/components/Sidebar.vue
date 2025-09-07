@@ -40,11 +40,14 @@ useHead({
 
 const menuItems = computed(() =>
   getRoutes()
-    .filter((route) => route.meta?.tab && !route.meta.tab.disabled)
+    .filter(
+      (route) =>
+        route.meta?.tab &&
+        !route.meta.tab.disabled &&
+        tabs.includes(route.path),
+    )
     .map((route) => ({ ...(route.meta.tab as TabConfig), path: route.path }))
-    .sort(
-      (a, b) => tabs.indexOf(a.path.slice(1)) - tabs.indexOf(b.path.slice(1)),
-    ),
+    .sort((a, b) => tabs.indexOf(a.path) - tabs.indexOf(b.path)),
 );
 </script>
 

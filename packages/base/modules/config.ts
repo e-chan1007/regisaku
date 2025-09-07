@@ -34,6 +34,25 @@ export default defineNuxtModule({
     nuxt.options.css.unshift(outputPath);
     const config: RegisakuConfig = (await import(configPath)).default;
 
+    const pwaRevision = Date.now().toString();
+    if (nuxt.options.pwa.workbox?.additionalManifestEntries) {
+      const entries = nuxt.options.pwa.workbox.additionalManifestEntries;
+      const tabCache = config.tabs.map(
+        (path) =>
+          ({
+            url: path,
+            revision: pwaRevision,
+          }) as const,
+      );
+      entries.push(
+        ...tabCache.filter(({ url }) =>
+          entries.every((e) =>
+            typeof e === "string" ? e === url : e.url !== url,
+          ),
+        ),
+      );
+    }
+
     nuxt.options.pwa.manifest = defu(
       {
         name: config.appName,

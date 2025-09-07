@@ -32,7 +32,7 @@ export interface RegisakuConfig<
 
 const defaultConfig: RegisakuConfig<IndexedDBAdapterConfig> = {
   appName: "regisaku",
-  tabs: ["index", "products", "sales"],
+  tabs: ["/", "/products", "/sales"],
   theme: {
     colors: {
       primary: "#0063b2",

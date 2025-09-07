@@ -55,22 +55,24 @@ export default defineNuxtConfig({
       },
     },
   },
+  icon: {
+    clientBundle: {
+      icons: ["material-symbols:remove", "material-symbols:add"],
+      scan: true,
+    },
+  },
   pwa: {
     devOptions: {
-      // enabled: true,
+      enabled: true,
     },
     registerType: "autoUpdate",
     workbox: {
+      skipWaiting: true,
       globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
-      additionalManifestEntries: [
-        {
-          url: "/",
-          revision: pwaRevision,
-        },
-      ],
+      additionalManifestEntries: [],
       runtimeCaching: [
         {
-          urlPattern: /^\/api\//,
+          urlPattern: /\/api\//,
           method: "GET",
           handler: "NetworkFirst",
         },
