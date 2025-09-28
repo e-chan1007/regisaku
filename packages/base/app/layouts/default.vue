@@ -24,6 +24,7 @@ useHead({
   height: 100%;
   display: flex;
   flex-direction: row;
+  user-select: none;
 }
 
 .layout-sidebar {

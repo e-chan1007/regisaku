@@ -117,7 +117,56 @@ export class IndexedDBAdapter extends DatabaseAdapter<IndexedDBAdapterConfig> {
     id: ProductId,
     updates: Partial<Omit<Product, "id">>,
   ): Promise<void> {
-    throw new IndexedDBError("Method not implemented.");
+    await this.db.transaction(
+      "rw",
+      [this.db.products, this.db.variantGroups, this.db.variants],
+      async () => {
+        if (updates.variantGroups) {
+          const oldVariantGroups = await this.db.variantGroups
+            .where({ productId: id })
+            .toArray();
+          const oldVariantGroupIds = oldVariantGroups.map((vg) => vg.id);
+          await this.db.variantGroups.where({ productId: id }).delete();
+          await this.db.variants
+            .where("variantGroupId")
+            .anyOf(oldVariantGroupIds)
+            .delete();
+
+          const newVariantGroups = updates.variantGroups.map((vg) => {
+            const vgId = vg.id ?? createId();
+            return {
+              ...vg,
+              id: vgId,
+              productId: id,
+              variants: vg.variants.map((variant) => ({
+                ...variant,
+                id: variant.id ?? createId(),
+                variantGroupId: vgId,
+              })),
+            };
+          });
+
+          const variantGroupRows: VariantGroupTableRow[] = newVariantGroups.map(
+            ({ variants, ...group }) => group,
+          );
+          const variantRows: VariantTableRow[] = newVariantGroups.flatMap(
+            ({ id: vgId, variants }) =>
+              variants.map((variant) => ({
+                ...variant,
+                variantGroupId: vgId,
+              })),
+          );
+
+          await this.db.variantGroups.bulkAdd(variantGroupRows);
+          await this.db.variants.bulkAdd(variantRows);
+        }
+
+        const { variantGroups: _, ...restUpdates } = updates;
+        if (Object.keys(restUpdates).length > 0) {
+          await this.db.products.update(id, restUpdates);
+        }
+      },
+    );
   }
   override deleteProduct(id: ProductId): Promise<void> {
     return this.db.products.delete(id);
@@ -263,7 +312,83 @@ export class IndexedDBAdapter extends DatabaseAdapter<IndexedDBAdapterConfig> {
     id: SaleId,
     updates: Partial<Omit<Sale, "id" | "transactionAt" | "updatedAt">>,
   ): Promise<void> {
-    throw new IndexedDBError("Method not implemented.");
+    await this.db.transaction(
+      "rw",
+      [
+        this.db.sales,
+        this.db.saleItems,
+        this.db.saleItemVariants,
+        this.db.saleDiscounts,
+      ],
+      async () => {
+        if (updates.items) {
+          const oldItems = await this.db.saleItems
+            .where({ saleId: id })
+            .toArray();
+          const oldItemIds = oldItems.map((item) => item.id);
+          await this.db.saleItems.where({ saleId: id }).delete();
+          await this.db.saleItemVariants
+            .where("saleItemId")
+            .anyOf(oldItemIds)
+            .delete();
+
+          // Add new items and their variants
+          const newItems = updates.items.map((item) => {
+            const itemId = item.id ?? createId();
+            return {
+              ...item,
+              id: itemId,
+              saleId: id,
+              variants: item.variants.map((variant) => ({
+                ...variant,
+                id: variant.id ?? createId(),
+                saleItemId: itemId,
+              })),
+            };
+          });
+
+          const itemRows: SaleItemTableRow[] = newItems.map(
+            ({ variants, ...item }) => item,
+          );
+          const variantRows: SaleItemVariantTableRow[] = newItems.flatMap(
+            (item) =>
+              item.variants.map((variant) => ({
+                ...variant,
+                saleItemId: item.id,
+              })),
+          );
+
+          await this.db.saleItems.bulkAdd(itemRows);
+          await this.db.saleItemVariants.bulkAdd(variantRows);
+        }
+
+        // Handle discounts update
+        if (updates.discounts) {
+          await this.db.saleDiscounts.where({ saleId: id }).delete();
+          const discountRows: SaleDiscountTableRow[] = updates.discounts.map(
+            ({ discountId, ...discount }) => ({
+              discountId,
+              saleId: id,
+              ...discount,
+              id: discount.id ?? createId(),
+            }),
+          );
+          await this.db.saleDiscounts.bulkAdd(discountRows);
+        }
+
+        const {
+          items: _items,
+          discounts: _discounts,
+          ...restUpdates
+        } = updates;
+        if (Object.keys(restUpdates).length > 0) {
+          await this.db.sales.update(id, {
+            ...restUpdates,
+            updatedAt: new Date(),
+          });
+        }
+      },
+    );
   }
   override async deleteSale(id: SaleId): Promise<void> {
     return this.db.sales.delete(id);

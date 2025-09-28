@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@types/chroma-js": "^3.1.1",
-    "nuxt": "^4.0.3",
+    "nuxt": "^4.1.2",
     "typescript": "^5.9.2",
     "vue": "^3.5.19"
   }

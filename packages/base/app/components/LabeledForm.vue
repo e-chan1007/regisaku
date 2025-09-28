@@ -26,6 +26,7 @@ label {
   gap: $spacing-xs;
   .label {
     font-weight: $font-medium;
+    font-size: $text-sm;
   }
 }
 </style>

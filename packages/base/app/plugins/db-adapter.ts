@@ -6,7 +6,6 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   if (!config.db.config) throw new Error("Database config is not provided");
   const adapter = new config.db.adapter(config.db.config);
   await adapter.initialize();
-  console.log("initialized on", adapter.context);
   nuxtApp.provide("db", adapter);
 });
 

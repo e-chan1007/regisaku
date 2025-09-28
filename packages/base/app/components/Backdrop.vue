@@ -1,5 +1,5 @@
 <template>
-  <div class="backdrop" :class="{ active, absolute }" @click.self="$emit('clickBackdrop')" :aria-hidden="!active">
+  <div class="backdrop" :class="{ active, absolute }" @click.self.stop="$emit('clickBackdrop')" :inert="!active">
     <slot />
   </div>
 </template>
@@ -23,7 +23,6 @@ defineEmits<(e: "clickBackdrop") => void>();
   transition: opacity 0.2s ease;
   pointer-events: none;
   overflow: hidden;
-  user-select: none;
 
   &.absolute {
     position: absolute;
@@ -37,7 +36,6 @@ defineEmits<(e: "clickBackdrop") => void>();
   &.active {
     opacity: 1;
     pointer-events: all;
-    user-select: all;
   }
 }
 </style>
