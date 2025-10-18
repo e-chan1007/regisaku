@@ -26,6 +26,10 @@ const modelValue = useModel(props, "modelValue");
 
 const value = ref<string | number | undefined>(modelValue.value);
 
+watch(modelValue, (newValue) => {
+  value.value = newValue;
+});
+
 watch(value, (newValue, oldValue) => {
   if (props.maxlength) {
     value.value = newValue = String(newValue).slice(0, props.maxlength);
