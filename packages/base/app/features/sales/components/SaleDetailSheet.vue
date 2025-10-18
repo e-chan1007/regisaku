@@ -1,7 +1,7 @@
 <template>
   <RSSideSheet v-model="open" parent="#page-root">
     <div class="container">
-      <div v-if="editingSaleId && sale" class="receipt">
+      <div v-if="showingSaleId && sale" class="receipt">
         <div class="receipt-header">
           <div>{{ formatDate(sale.transactionAt) }}</div>
           <div>取引ID: <span>{{ sale.id }}</span></div>
@@ -52,12 +52,12 @@
         </RSButton>
       </div>
       <RSButton
-        v-if="editingSaleId"
+        v-if="showingSaleId"
         variant="text"
         color="error"
         size="sm"
-        @click="deleteSale(editingSaleId)"
-        :disabled="!editingSaleId">
+        @click="deleteSale(showingSaleId)"
+        :disabled="!showingSaleId">
         削除
       </RSButton>
     </div>
@@ -71,10 +71,10 @@ import { formatDate } from "~/utils/formatDate";
 import { formatYen } from "~/utils/formatYen";
 
 interface Props {
-  editingSaleId: SaleId;
+  showingSaleId: SaleId | null;
   open: boolean;
 }
-const { editingSaleId } = defineProps<Props>();
+const { showingSaleId } = defineProps<Props>();
 
 const open = defineModel<boolean>("open", { default: false });
 
@@ -91,11 +91,11 @@ const {
 } = useSaleDatabase();
 
 const sale = computed(() =>
-  editingSaleId ? sales.value.find((s) => s.id === editingSaleId) : null,
+  showingSaleId ? sales.value.find((s) => s.id === showingSaleId) : null,
 );
 
 watch(
-  () => [editingSaleId, open.value],
+  () => [showingSaleId, open.value],
   ([newId]) => {
     if (newId === null) {
       resetSale();
@@ -109,8 +109,9 @@ watch(
 );
 
 const saveSale = async () => {
-  await updateSaleInDB(editingSaleId, { note: newSale.value.note });
-  const index = sales.value.findIndex((s) => s.id === editingSaleId);
+  if (!showingSaleId) return;
+  await updateSaleInDB(showingSaleId, { note: newSale.value.note });
+  const index = sales.value.findIndex((s) => s.id === showingSaleId);
   if (index !== -1) {
     const original = sales.value[index];
     if (original) {

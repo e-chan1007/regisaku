@@ -12,7 +12,7 @@
     <div class="item-grid">
       <SaleCard v-for="sale in items" :key="sale.id" :sale="sale" @click="editSale(sale.id)" />
     </div>
-    <SaleDetailSheet v-model:open="isItemEditSheetOpen" :editingSaleId="(editingSaleId as SaleId)" />
+    <SaleDetailSheet v-model:open="isItemEditSheetOpen" :showingSaleId="(editingSaleId as SaleId)" />
   </RSPanelBody>
 </template>
 
