@@ -12,14 +12,14 @@
     <div class="item-grid">
       <SaleCard v-for="sale in items" :key="sale.id" :sale="sale" @click="editSale(sale.id)" />
     </div>
-    <EditItemSheet v-model:open="isItemEditSheetOpen" :editingSaleId="(editingSaleId as SaleId)" />
+    <SaleDetailSheet v-model:open="isItemEditSheetOpen" :editingSaleId="(editingSaleId as SaleId)" />
   </RSPanelBody>
 </template>
 
 <script setup lang="ts">
 import type { SaleId } from "@e-chan1007/regisaku-shared/types";
-import EditItemSheet from "../components/EditItemSheet.vue";
 import SaleCard from "../components/SaleCard.vue";
+import SaleDetailSheet from "../components/SaleDetailSheet.vue";
 import SaleGridHeader from "../components/SaleGridHeader.vue";
 
 const isItemEditSheetOpen = ref(false);

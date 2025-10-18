@@ -23,14 +23,20 @@ defineSlots<{
 
 const props = withDefaults(defineProps<Props>(), { full: false, size: "md" });
 const modelValue = useModel(props, "modelValue");
+
 const value = ref<string | number | undefined>(modelValue.value);
 
-watch(value, (newValue) => {
+watch(value, (newValue, oldValue) => {
   if (props.maxlength) {
     value.value = newValue = String(newValue).slice(0, props.maxlength);
   }
   if (props.type === "number") {
-    newValue = Number(newValue);
+    const _newValue = Number(newValue);
+    if (isNaN(_newValue) && newValue !== "") {
+      newValue = oldValue;
+    } else {
+      newValue = _newValue;
+    }
   }
   modelValue.value = newValue;
 });

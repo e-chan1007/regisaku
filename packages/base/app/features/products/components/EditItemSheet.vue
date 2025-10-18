@@ -5,7 +5,7 @@
         <RSInput full v-model.trim="newProduct.name" placeholder="商品名" />
       </RSLabeledForm>
       <RSLabeledForm label="単価">
-        <RSInput full v-model.number="newProduct.price" type="number" placeholder="単価" :maxlength="RS_MAX_DIGITS">
+        <RSInput full v-model.number="newProduct.price" type="number" inputmode="numeric" placeholder="単価" :maxlength="RS_MAX_DIGITS">
           <template #prepend>¥</template>
         </RSInput>
       </RSLabeledForm>
@@ -112,6 +112,9 @@ const saveProduct = async () => {
     if (newProductImage.value) {
       await setImage(editingProductId, newProductImage.value);
       imageFiles.value[editingProductId] = newProductImage.value;
+    } else {
+      await deleteImage(editingProductId);
+      delete imageFiles.value[editingProductId];
     }
   } else {
     const addedProduct = await addProductToDB(newProduct.value);
@@ -130,6 +133,7 @@ const deleteProduct = async (productId: ProductId) => {
   if (!confirmed) return;
 
   await deleteProductFromDB(productId);
+  await deleteImage(productId);
   open.value = false;
   const index = products.value.findIndex((p) => p.id === productId);
   if (index !== -1) {
