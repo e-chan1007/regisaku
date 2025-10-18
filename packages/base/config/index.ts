@@ -1,16 +1,23 @@
 import type {
   DatabaseAdapterConfig,
   DatabaseAdapterConstructor,
+  StorageAdapterConfig,
+  StorageAdapterConstructor,
 } from "@e-chan1007/regisaku-adapter-sdk";
 import {
   IndexedDBAdapter,
   type IndexedDBAdapterConfig,
 } from "@e-chan1007/regisaku-adapters/db/indexeddb";
+import {
+  IndexedDBStorageAdapter,
+  type IndexedDBStorageAdapterConfig,
+} from "@e-chan1007/regisaku-adapters/storage/indexeddb";
 import type { DeepPartial } from "@e-chan1007/regisaku-shared/types";
 import { defu } from "defu";
 
 export interface RegisakuConfig<
   DBAdapterConfig extends DatabaseAdapterConfig = DatabaseAdapterConfig,
+  SAdapterConfig extends StorageAdapterConfig = StorageAdapterConfig,
 > {
   appName: string;
   tabs: string[];
@@ -28,9 +35,16 @@ export interface RegisakuConfig<
     adapter: DatabaseAdapterConstructor<DBAdapterConfig>;
     config?: DBAdapterConfig;
   };
+  storage: {
+    adapter: StorageAdapterConstructor<SAdapterConfig>;
+    config?: SAdapterConfig;
+  };
 }
 
-const defaultConfig: RegisakuConfig<IndexedDBAdapterConfig> = {
+const defaultConfig: RegisakuConfig<
+  IndexedDBAdapterConfig,
+  IndexedDBStorageAdapterConfig
+> = {
   appName: "regisaku",
   tabs: ["/", "/products", "/sales"],
   theme: {
@@ -47,14 +61,23 @@ const defaultConfig: RegisakuConfig<IndexedDBAdapterConfig> = {
     adapter: IndexedDBAdapter,
     config: IndexedDBAdapter.defaultConfig,
   },
+  storage: {
+    adapter: IndexedDBStorageAdapter,
+    config: IndexedDBStorageAdapter.defaultConfig,
+  },
 };
 
-let config: RegisakuConfig<any> | null = null;
+let config: RegisakuConfig<DatabaseAdapterConfig, StorageAdapterConfig> | null =
+  null;
 
-export function defineRegisakuConfig<AC extends DatabaseAdapterConfig>(
-  newConfig?: DeepPartial<RegisakuConfig<AC>>,
-): RegisakuConfig<AC> {
-  if (config) return config;
-  config = defu(newConfig, defaultConfig);
-  return config;
+export function defineRegisakuConfig<
+  AC extends DatabaseAdapterConfig = IndexedDBAdapterConfig,
+  SC extends StorageAdapterConfig = IndexedDBStorageAdapterConfig,
+>(newConfig?: DeepPartial<RegisakuConfig<AC, SC>>): RegisakuConfig<AC, SC> {
+  if (config) return config as RegisakuConfig<AC, SC>;
+  config = defu(newConfig, defaultConfig) as RegisakuConfig<
+    DatabaseAdapterConfig,
+    StorageAdapterConfig
+  >;
+  return config as RegisakuConfig<AC, SC>;
 }

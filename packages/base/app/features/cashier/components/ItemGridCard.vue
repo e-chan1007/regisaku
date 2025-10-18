@@ -2,6 +2,7 @@
   <button class="item-grid-card" @click="addToOrder">
     <div class="thumbnail">
       <Icon name="material-symbols:shopping-cart" class="fallback-icon" />
+      <img v-if="item.id in imageUrls" :src="imageUrls[item.id]" :alt="item.name" @error="hideImage = true" @loadeddata="hideImage = false" />
     </div>
     <div class="details">
       <div class="name">{{ item.name }}</div>
@@ -18,7 +19,10 @@ interface Props {
 }
 
 const { addOrder } = useOrderStore();
+const { imageUrls } = useProductImageStorage();
 const props = defineProps<Props>();
+
+const hideImage = ref(false);
 
 const addToOrder = () => {
   addOrder(props.item, [], 1);
@@ -45,13 +49,21 @@ const addToOrder = () => {
 }
 
 .thumbnail {
+  position: relative;
   display: grid;
   place-items: center;
   aspect-ratio: 1;
+  overflow: hidden;
   & > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background-color: $color-white;
   }
   border-top-left-radius: $radius-md;
   border-top-right-radius: $radius-md;

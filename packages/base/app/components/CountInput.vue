@@ -4,7 +4,7 @@
       <Icon name="material-symbols:remove" />
     </button>
     <input v-bind="$attrs" v-model.number="modelValue" type="number" inputmode="numeric" @blur="onBlur" title="数量を変更" />
-    <button class="btn-increment" @click="modelValue++" title="増やす">
+    <button class="btn-increment" @click="modelValue++" title="増やす" :disabled="modelValue >= RS_MAX_ITEMS_PER_PRODUCT">
       <Icon name="material-symbols:add" />
     </button>
   </div>
@@ -13,6 +13,7 @@
 <script lang="ts" setup>
 import { clamp } from "remeda";
 import type { InputHTMLAttributes } from "vue";
+import { RS_MAX_ITEMS_PER_PRODUCT } from "~~/shared/limits";
 
 interface Props extends /* @vue-ignore */ InputHTMLAttributes {
   modelValue: number;
@@ -91,12 +92,18 @@ const onBlur = (e: FocusEvent) => {
     transition: background-color 0.2s ease;
     overflow: hidden;
 
-    &:hover, &:focus {
+    &:not(:disabled):hover,
+    &:not(:disabled):focus {
       background-color: $color-gray-1;
     }
 
-    &:active {
+    &:not(:disabled):active {
       background-color: $color-gray-2;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
     }
   }
 }

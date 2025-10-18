@@ -5,9 +5,22 @@
         <RSInput full v-model.trim="newProduct.name" placeholder="商品名" />
       </RSLabeledForm>
       <RSLabeledForm label="単価">
-        <RSInput full v-model.number="newProduct.price" type="number" placeholder="単価">
+        <RSInput full v-model.number="newProduct.price" type="number" placeholder="単価" :maxlength="RS_MAX_DIGITS">
           <template #prepend>¥</template>
         </RSInput>
+      </RSLabeledForm>
+      <RSLabeledForm label="商品の画像">
+        <RSFileInput
+          full
+          v-model="newProductImage"
+          placeholder="商品の画像を選択"
+          accept="image/*"
+          clearable
+        >
+          <template #prepend>
+            <Icon name="material-symbols:image" />
+          </template>
+        </RSFileInput>
       </RSLabeledForm>
       <div class="actions">
         <RSButton
@@ -41,6 +54,8 @@
 <script lang="ts" setup>
 import type { Product, ProductId } from "@e-chan1007/regisaku-shared/types";
 import { clone } from "remeda";
+import { useProductImageStorage } from "~/composables/useProductImageStorage";
+import { RS_MAX_DIGITS } from "~~/shared/limits";
 
 interface Props {
   editingProductId: ProductId | null;
@@ -56,6 +71,7 @@ const newProduct = ref<Omit<Product, "id">>({
   isHidden: false,
   variantGroups: [],
 });
+const newProductImage = ref<File | null>(null);
 
 const {
   products,
@@ -63,10 +79,11 @@ const {
   update: updateProductInDB,
   delete: deleteProductFromDB,
 } = useProductDatabase();
+const { imageFiles, setImage, deleteImage } = useProductImageStorage();
 
 watch(
-  () => [editingProductId, open.value],
-  ([newId]) => {
+  () => [editingProductId, open.value] as const,
+  ([newId]: Readonly<[ProductId | null, boolean]>) => {
     if (newId === null) {
       resetProduct();
       return;
@@ -74,6 +91,7 @@ watch(
     const product = products.value.find((p) => p.id === newId);
     if (product) {
       newProduct.value = clone(product);
+      newProductImage.value = imageFiles.value[newId] || null;
     }
   },
 );
@@ -81,6 +99,7 @@ watch(
 const saveProduct = async () => {
   if (editingProductId) {
     await updateProductInDB(editingProductId, newProduct.value);
+
     const index = products.value.findIndex((p) => p.id === editingProductId);
     if (index !== -1) {
       products.value[index] = {
@@ -89,9 +108,18 @@ const saveProduct = async () => {
         ...newProduct.value,
       };
     }
+
+    if (newProductImage.value) {
+      await setImage(editingProductId, newProductImage.value);
+      imageFiles.value[editingProductId] = newProductImage.value;
+    }
   } else {
     const addedProduct = await addProductToDB(newProduct.value);
     products.value.push(addedProduct);
+    if (newProductImage.value) {
+      await setImage(addedProduct.id, newProductImage.value);
+      imageFiles.value[addedProduct.id] = newProductImage.value;
+    }
   }
   open.value = false;
   resetProduct();

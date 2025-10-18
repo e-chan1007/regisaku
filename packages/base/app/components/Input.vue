@@ -1,18 +1,20 @@
 <template>
   <label class="input-group" :class="[`input-${props.size}`, { full }]">
     <slot name="prepend" />
-    <input v-model="modelValue" v-bind="$attrs" />
+    <input v-model="value" v-bind="$attrs" />
     <slot name="append" />
   </label>
 </template>
 
 <script lang="ts" setup>
-import type { InputHTMLAttributes } from "vue";
+import type { InputHTMLAttributes, InputTypeHTMLAttribute } from "vue";
 
 interface Props extends /* @vue-ignore */ InputHTMLAttributes {
+  type?: InputTypeHTMLAttribute;
   full?: boolean;
   size?: "sm" | "md" | "lg";
   modelValue?: string | number;
+  maxlength?: number;
 }
 defineSlots<{
   prepend: () => unknown;
@@ -21,6 +23,17 @@ defineSlots<{
 
 const props = withDefaults(defineProps<Props>(), { full: false, size: "md" });
 const modelValue = useModel(props, "modelValue");
+const value = ref<string | number | undefined>(modelValue.value);
+
+watch(value, (newValue) => {
+  if (props.maxlength) {
+    value.value = newValue = String(newValue).slice(0, props.maxlength);
+  }
+  if (props.type === "number") {
+    newValue = Number(newValue);
+  }
+  modelValue.value = newValue;
+});
 </script>
 
 <style lang="scss" scoped>

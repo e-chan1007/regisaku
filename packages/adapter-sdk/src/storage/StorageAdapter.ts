@@ -21,11 +21,11 @@ export abstract class AbstractStorageAdapter<
     this.isOnline = online;
   }
 
-  abstract setProductImage(productId: ProductId, image: Blob): Promise<void>;
-  abstract getProductImage(productId: ProductId): Promise<Blob | null>;
+  abstract setProductImage(productId: ProductId, image: File): Promise<void>;
+  abstract getProductImage(productId: ProductId): Promise<File | null>;
   abstract getProductImages(
-    productIds: ProductId[],
-  ): Promise<Record<ProductId, Blob>>;
+    productIds?: ProductId[],
+  ): Promise<Record<ProductId, File>>;
   abstract deleteProductImage(productId: ProductId): Promise<void>;
 }
 

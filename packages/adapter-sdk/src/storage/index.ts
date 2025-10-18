@@ -1,4 +1,5 @@
 export {
+  AbstractStorageAdapter,
   AbstractStorageAdapter as StorageAdapter,
   StorageAdapterConfig,
   StorageAdapterConstructor,

@@ -5,6 +5,8 @@ import type {
   VariantGroup,
 } from "@e-chan1007/regisaku-shared/types";
 import { createId } from "@e-chan1007/regisaku-shared/utils";
+import { clamp } from "remeda";
+import { RS_MAX_ITEMS_PER_PRODUCT } from "~~/shared/limits";
 
 export type OrderItemId = Branded<string, "OrderItemId">;
 
@@ -51,7 +53,9 @@ export const useOrderStore = defineStore("orders", () => {
   ) => {
     const existingOrder = orders.value.find((order) => order.id === itemId);
     if (existingOrder) {
-      existingOrder.quantity = quantity;
+      existingOrder.quantity = clamp(quantity, {
+        max: RS_MAX_ITEMS_PER_PRODUCT,
+      });
       if (selectedVariants) existingOrder.selectedVariants = selectedVariants;
     }
   };

@@ -12,6 +12,10 @@
     "./db/indexeddb": {
       "types": "./dist/db/indexeddb/index.d.ts",
       "import": "./dist/db/indexeddb/index.js"
+    },
+    "./storage/indexeddb": {
+      "types": "./dist/storage/indexeddb/index.d.ts",
+      "import": "./dist/storage/indexeddb/index.js"
     }
   },
   "dependencies": {

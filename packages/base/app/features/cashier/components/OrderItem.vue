@@ -3,7 +3,7 @@
     <div class="name">{{ item.product.name }}</div>
     <div class="actions">
       <div class="price">{{ formatYen(item.product.price * quantity) }}</div>
-      <RSCountInput v-model="quantity" size="sm" :max="999" :min="0" />
+      <RSCountInput v-model="quantity" size="sm" :max="RS_MAX_ITEMS_PER_PRODUCT" :min="0" />
       <RSButton variant="text" color="error" type="square" size="sm" @click="quantity = 0" title="削除">
         <Icon name="material-symbols:backspace" />
       </RSButton>
@@ -13,6 +13,7 @@
 
 <script lang="ts" setup>
 import { RSCountInput } from "#components";
+import { RS_MAX_ITEMS_PER_PRODUCT } from "~~/shared/limits";
 
 interface Props {
   item: OrderItem;
